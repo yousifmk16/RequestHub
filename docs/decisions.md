@@ -172,6 +172,17 @@ Feeds the README section "Development approach".
     outside changes (the empty state's Clear filters link, back/forward).
   - While a new list loads, the filters mark themselves `data-pending` and the
     list dims via `group-has-data-pending` (CSS only, no shared context).
+- **Status chips (replaced the Status dropdown):** "All · New · In Progress ·
+  Completed", each with a count, above the list. Having both chips and a status
+  dropdown would have meant two controls for one filter, so the dropdown went.
+  - **Counts:** they follow the other filters (search, department, priority)
+    but ignore status, so they stay put while switching chips and say where the
+    matching work stands.
+  - **One query:** the page runs a single query without the status filter,
+    counts it, then narrows to the chosen status in memory, so counts and list
+    can never disagree.
+  - **Accessible name:** each chip is named "In Progress, 7 requests" rather
+    than the visual "In Progress7".
 - **Inline status:** Local state that re-syncs when the server value changes,
   not `useOptimistic`. An optimistic value would snap back between the PATCH
   finishing and `router.refresh()` landing, causing a flicker. On failure it
