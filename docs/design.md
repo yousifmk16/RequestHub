@@ -22,30 +22,47 @@ read a word. Request Hub keeps that one idea:
 
 ## Tokens
 
-| Name | Hex | Role |
+The palette is **Lakeora's brand palette**, taken from the CSS custom properties
+published on lakeora.ai (`--lakeora-navy`, `--lakeora-red`, the `--slate-*` and
+`--navy-*` ramps). Each brand value is mapped to a semantic role in
+`src/app/globals.css`:
+
+| Role | Lakeora token | Hex | Used for |
+|---|---|---|---|
+| Navy | `--lakeora-navy` | `#1F2A44` | Header band, headings, primary buttons |
+| Red | `--lakeora-red` | `#E8372A` | Brand marks only: active-tab underline, accents |
+| Red, strong | `--link-hover` | `#C72C21` | Red surfaces with white text (New request), destructive actions, high priority text |
+| Slate | `--lakeora-slate` | `#3E4C68` | Focus ring, IT routing tab |
+| Page | `--slate-10` | `#F5F8FC` | Page background behind white surfaces |
+| Tint | `--slate-20` | `#EAF0F8` | Secondary/muted fills, hover rows |
+| Rule | `--navy-20` | `#D2D4DA` | Dividers |
+| Input border | `--navy-60` | `#797F8F` | Form control borders (4:1, WCAG 1.4.11) |
+| Muted text | `--slate-80` | `#5B6882` | Secondary text (5.6:1 on white) |
+
+**Accessibility adjustment:** white text on `#E8372A` is 4.19:1, below WCAG AA
+(4.5:1). Any red surface behind text uses the brand's own darker red `#C72C21`
+(5.5:1). The bright red stays for marks that carry no text.
+
+Department routing colours (also chart colours), from the same palette:
+
+| Category | Lakeora token | Hex |
 |---|---|---|
-| Ink | `#1B2B44` | Header band, primary buttons, headings |
-| Paper | `#FFFFFF` | Main surface |
-| Desk | `#F3F4F6` | Page background behind the work surface |
-| Rule | `#DDE1E7` | Row dividers, input borders |
-| Graphite | `#5B6575` | Secondary text |
-| Alert | `#C2410C` | High priority, destructive actions |
-
-Department routing colours (also chart colours):
-
-| Category | Hex |
-|---|---|
-| IT | `#2563C9` cobalt |
-| HR | `#9A3E8C` plum |
-| Administration | `#1F8A6A` green |
-| Other | `#7C8594` slate |
+| IT | `--lakeora-slate` | `#3E4C68` |
+| HR | `--lakeora-coral` | `#ED6E6B` |
+| Administration | `--color-warning` | `#FCBC2B` gold |
+| Other | `--navy-40` | `#A5AAB4` |
 
 Status uses an **icon + word** pill with a light tint, never colour alone:
-New (open circle, blue tint), In Progress (half-filled circle, amber tint),
-Completed (check, green tint).
+New (open circle, navy-10 tint), In Progress (half-filled circle, warm tint),
+Completed (check, tint of `--color-success` green).
 
-Priority uses **signal bars + word** (1 to 3 bars). High is drawn in Alert, so
-it stands out in a long list even without reading.
+Priority uses **signal bars + word** (1 to 3 bars). High is drawn in strong red,
+so it stands out in a long list even without reading.
+
+Colour meanings never depend on colour alone. Gold (Administration) and the
+warm In Progress tint appear in different forms (a solid tab vs a labelled
+pill), and coral (HR) differs from High priority both in hue and in form
+(tab vs bars).
 
 ## Type
 - **Public Sans** (one family). It was designed for public-service interfaces:
