@@ -10,6 +10,12 @@ describe("getDatabaseConfig", () => {
     expect(getDatabaseConfig()).toEqual({ url: DEFAULT_DATABASE_URL, authToken: undefined });
   });
 
+  it("refuses the local fallback on Vercel, naming the fix", () => {
+    vi.stubEnv("VERCEL", "1");
+    vi.stubEnv("DATABASE_URL", "");
+    expect(() => getDatabaseConfig()).toThrow(/DATABASE_URL is not set/);
+  });
+
   it("uses the configured Turso URL and token in production", () => {
     vi.stubEnv("DATABASE_URL", "libsql://request-hub.turso.io");
     vi.stubEnv("DATABASE_AUTH_TOKEN", "test-token");

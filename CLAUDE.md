@@ -84,6 +84,7 @@ docs/                         → requirements, priorities, plan, decisions, ai-
 - `npx playwright test` — e2e tests
 - `npx prisma migrate dev --name <name>` — create/apply migration
 - `npx prisma db seed` — seed data
+- `npm run db:deploy` — apply migrations to Turso (production); see docs/deployment.md
 
 ## Working rules
 - Work on one step of `docs/plan.md` at a time. Don't jump ahead.
