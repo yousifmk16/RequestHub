@@ -1,52 +1,81 @@
 ---
 name: add-request-field
-description: Use whenever a new field is added to the Request model (e.g. assignee, due date, department). Walks every layer in order so nothing is missed — schema, migration, validation, service, API, form, list, filters, seed and tests.
+description: Use whenever a new field is added to the Request model (e.g. assignee, due date, location). Walks every layer in order so nothing is missed — schema, migration, validation, constants, service, form, edit page, list, filters, dashboard, seed, tests and production.
 ---
 
 # Add a field to Request
 
-Follow every step in order. Before starting, confirm with the user:
+Before starting, confirm with the user:
 - field name, type, required or optional, default value
-- validation rules
-- whether it should appear in the list, filters and/or dashboard
+- validation rules (and the error messages, in plain words)
+- where it appears: form, list row, filters, dashboard
 
-Then state the plan in 2–3 lines and proceed.
+Then state the plan in 2–3 lines and proceed. The data flow to keep in mind:
+form → `/api/requests*` → Zod (`src/lib/validation.ts`) → service
+(`src/lib/services/requests.ts`) → Prisma → database. See docs/architecture.md.
 
 ## Steps
 
-1. **Prisma schema** — add the field to `model Request` in `prisma/schema.prisma`.
-   Optional fields use `?`. New enums get their own `enum` block.
-   Existing rows: new required fields need a `@default(...)`.
+1. **Schema**: add the field to `model Request` in `prisma/schema.prisma`.
+   Optional → `?`. A new enum gets its own `enum` block. A new required field
+   needs `@default(...)` so existing rows can migrate.
 
-2. **Migration** — `npx prisma migrate dev --name add_<field>`.
-   Confirm the migration SQL looks right.
+2. **Migration**: `npm run db:migrate -- --name add_<field>`, then
+   `npx prisma generate` (Prisma 7's `migrate dev` no longer regenerates the
+   client). Read the generated SQL.
 
-3. **Validation** — update the Zod schema in `src/lib/validation.ts`
-   (create + update schemas). Use clear error messages.
-   If it's an enum, add labels/colors to `src/lib/constants.ts`.
+3. **Validation** (`src/lib/validation.ts`):
+   - add a field schema next to `title` / `description` (trimmed strings,
+     `abort` on the "required" check, messages in the UI's words)
+   - add it to `requestCreateSchema` **and** to the object inside
+     `requestUpdateSchema` (it lists fields explicitly). `requestFormSchema`
+     extends create, so it follows.
+   - if filterable, add it to `requestQuerySchema` with `.optional().catch(undefined)`
 
-4. **Service** — update `src/lib/services/requests.ts`: create, update,
-   and any search/filter logic if the field is filterable.
+4. **Constants** (`src/lib/constants.ts`): limits, and for an enum: labels,
+   hints, ordering (and colours/icons in `src/components/requests/styles.ts`,
+   tokens in `globals.css`, then `npm run dev:clean`).
 
-5. **API routes** — usually no change needed if they use the Zod schema and
-   service. Verify that the field passes through end-to-end.
+5. **Service** (`src/lib/services/requests.ts`): create/update pass the
+   validated input through, so usually no change. If filterable: the `where`
+   in `listRequests`. If it's on the dashboard: `getRequestStats`.
 
-6. **Form** — add the input to `RequestForm` with label, error message and
-   correct default value for edit mode.
+6. **API routes**: normally no change. They use the schemas and the service.
 
-7. **List / detail** — show the field in the table and mobile card view if
-   required. Keep layout working at 375px.
+7. **Form** (`src/components/requests/form/RequestForm.tsx`):
+   - the input (or `OptionCards` for an enum, options in `form/options.tsx`),
+     with a `<label>`, `FieldError`, and `aria-describedby`
+   - **add the name to `FIELDS`**, or server-side errors for it won't show
+     under the field
+   - **edit page** `src/app/requests/[id]/edit/page.tsx`: add it to the
+     destructuring and `initialValues`, or editing won't pre-fill it
 
-8. **Filters** — if filterable, add to the Filters component and URL params.
+8. **List** (`src/components/requests/RequestList.tsx`): add a cell and a
+   width to `COLUMNS` and the header row. Keep the stacked mobile layout and
+   check 320px (`tests/e2e/reflow.spec.ts`).
 
-9. **Dashboard** — only if requested.
+9. **Filters** (if filterable): `buildRequestsHref` and `hasActiveFilters`
+   (`src/lib/request-query-url.ts`), and a `FilterSelect` in `RequestFilters.tsx`.
 
-10. **Seed** — update `prisma/seed.ts` with realistic values; reseed.
+10. **Dashboard** (only if asked): `StatCards` or a new `BreakdownBars` in
+    `src/components/dashboard/`.
 
-11. **Tests** — update unit tests for validation; update e2e create/edit flow.
+11. **Seed** (`prisma/seed-data.ts`): add realistic values to every row. The
+    `seed-data` unit test fails if any row breaks validation. Then
+    `npm run db:seed`.
 
-12. **Verify** — `npm run lint`, `npm test`, then use Playwright MCP to create
-    and edit a request with the new field at desktop and 375px.
+12. **Tests**:
+    - unit: `validation.test.ts` (rules, messages), `api-routes.test.ts`
+      (400 with the field's message), `requests-service.test.ts` if it filters
+    - e2e: `request-form.spec.ts` (fill and edit it). Update the defaults in
+      `tests/e2e/helpers.ts` if the field is required.
 
-13. **Summarize** — list files changed and how the field flows:
-    form → API route → Zod → service → Prisma → DB.
+13. **Verify**: `npm run lint`, `npm run typecheck`, `npm test`,
+    `npm run test:e2e`; then create and edit a request with the field in the
+    browser at desktop and 375px, checking the console for errors.
+
+14. **Production**: run `npm run db:deploy` against Turso **before** pushing
+    (docs/deployment.md). Check `/api/health` after the deploy.
+
+15. **Summarise**: the files changed, and how the field flows from form to
+    database. Record any real trade-off in docs/decisions.md.
