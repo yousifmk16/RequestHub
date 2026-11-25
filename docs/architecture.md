@@ -84,7 +84,7 @@ scripts/                 Test DB prep, Turso migrations/setup, screenshots
 
 | Change | Files |
 |---|---|
-| **Add a field to Request** | Follow `.claude/skills/add-request-field/SKILL.md`: schema → migration → validation → constants → service → form → list → filters → seed → tests |
+| **Add a field to Request** | Follow `.claude/skills/add-request-field/SKILL.md`: schema → migration → validation → constants → service → form → edit page → detail page → list → filters → CSV export → seed → tests |
 | A validation rule (e.g. title length) | `TITLE_LENGTH` / `DESCRIPTION_LENGTH` in `constants.ts`; messages in `validation.ts`. The client and server both change |
 | Add a status, department or priority value | `enum` in `schema.prisma` + migration; label, hint (and weight for priority) in `constants.ts`; colour/icon in `components/requests/styles.ts`; colour token in `globals.css` |
 | A label or wording | `constants.ts` (labels, hints), the component for UI copy |
