@@ -75,7 +75,9 @@ docs/                         → requirements, priorities, plan, decisions, ai-
 
 ## Commands
 - `npm run dev` — start dev server
-- `npm run dev:clean` — clear `.next` and start dev (use after editing theme tokens in globals.css)
+- `npm run dev:clean` — clear `.next` and start dev. Use it after editing theme tokens in
+  globals.css **or after switching git branches** while the dev server runs: Turbopack's dev
+  cache can keep serving the old stylesheet (production builds are unaffected).
 - `npm run lint` — lint
 - `npm test` — unit tests
 - `npx playwright test` — e2e tests
