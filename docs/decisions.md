@@ -47,6 +47,32 @@ Feeds the README section "Development approach".
   other filters.
 - **Trade-off:** Case-insensitivity stays ASCII-only, as with SQLite LIKE.
 
+### D4 — Caching: keep Cache Components on, never cache request data
+- **Context:** The Next.js 16 scaffold enables `cacheComponents`. Under this
+  model, anything with no runtime or database access can be prerendered, and
+  `use cache` opts data into caching. Requests change on every
+  create/edit/delete, and R7 requires the dashboard to show current data.
+- **Options:** A) turn Cache Components off · B) keep it and cache data with
+  `use cache` plus invalidation after every mutation · C) keep it, cache no
+  request data, and read the database at request time.
+- **Choice:** C.
+- **Why:** Database reads opt out of prerendering automatically (both API
+  routes build as dynamic `ƒ`), so data is always fresh with no invalidation
+  logic to get wrong. The static shell (layout, nav) is still prerendered, so
+  pages load fast. B would add cache tags and `revalidateTag` calls on every
+  write for no real benefit at this data size.
+- **Consequence:** Pages that read data must render it inside `<Suspense>` or
+  a `loading.tsx` boundary, which the UI needs for loading states anyway.
+
+### D5 — API shape
+- **Choice:** Plain REST. Resources are returned as-is (a list returns an
+  array). Create returns `201` + `Location`, delete returns `204`. Errors are
+  always `{ error, details? }`, where `details` is Zod's flattened
+  `{ formErrors, fieldErrors }`.
+- **Why:** Standard, easy to explain, easy to test with curl. `fieldErrors` keys
+  match form field names, so the form shows server errors under the right input
+  with no extra mapping.
+
 ## Template
 
 ### D1 — <decision title>
