@@ -1,5 +1,13 @@
 # Request Hub — Build Plan
 
+> **Note:** this is the original plan, kept as written. During the build,
+> the equivalent work used the Next.js docs bundled in `node_modules`, the
+> installed type definitions, the shadcn CLI, the Playwright test runner and
+> the built-in browser of the Claude desktop app. The MCP servers in
+> `.mcp.json` (context7, shadcn, Playwright, next-devtools) were then used as
+> a final verification pass. [ai-log.md](ai-log.md) records what each one
+> checked.
+
 ## Context
 This is a recruitment assessment. The task is to build an Employee Request Management System ("Request Hub") with AI tools and deliver a GitHub repo, a deployed URL and a README. The groundwork is already committed: `CLAUDE.md`, `docs/requirements.md` (R1–R8 with acceptance checks), `docs/priorities.md`, `docs/decisions.md`, `docs/ai-log.md`, the two project skills and `.mcp.json`. There is no app code yet, and `docs/plan.md` (which CLAUDE.md refers to) does not exist.
 
