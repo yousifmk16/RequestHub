@@ -80,7 +80,7 @@ No `.env` file is needed.
 | `npm run dev` | Start the app (creates and seeds the local database if needed) |
 | `npm run dev:clean` | Clear `.next` and start. Use it after editing theme tokens or switching branches |
 | `npm test` | 116 unit and integration tests (Vitest, against a real SQLite test file) |
-| `npm run test:e2e` | 50 end-to-end runs (Playwright, desktop and 375px, on a production build) |
+| `npm run test:e2e` | 68 end-to-end runs (34 tests × desktop and 375px, both themes, on a production build) |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript strict |
 | `npm run db:seed` | Replace the local data with fresh demo data |
 | `npm run db:deploy` | Apply migrations to the production Turso database ([deployment guide](docs/deployment.md)) |
@@ -205,8 +205,8 @@ WCAG scans, keyboard-only flows and 320px reflow. The R1–R8 coverage map is in
 - **A missing request's page shows the 404 screen but returns HTTP 200.** With
   streaming pages, the status is sent before the lookup finishes. `noindex` is
   set, and the API returns real 404s ([D11](docs/decisions.md)).
-- **Unsaved-changes warning** covers closing or reloading the tab and Cancel,
-  but not other in-app links (the App Router has no blocking API).
+- **Unsaved-changes warning** covers closing or reloading the tab and every
+  in-app link, but not the browser's back/forward buttons.
 - **No manual screen-reader session** (NVDA, VoiceOver). Names and roles were
   checked through the accessibility tree and axe.
 - Search is case-insensitive for English letters only (SQLite `LIKE`).
