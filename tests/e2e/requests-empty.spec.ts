@@ -21,6 +21,14 @@ test("requests page invites the first request when there are none", async ({ pag
   );
 });
 
+test("dashboard shows zeros and invites the first request when there are none", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.getByRole("region", { name: "At a glance" }).getByRole("link", { name: /All requests/ })).toContainText("0");
+  await expect(page.getByText("Nothing to show yet. Bars appear as requests come in.").first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Create the first one" })).toBeVisible();
+});
+
 test("invalid filter values in the URL fall back instead of failing", async ({ page }) => {
   const response = await page.goto("/requests?category=FINANCE&sort=random&status=DONE");
 
