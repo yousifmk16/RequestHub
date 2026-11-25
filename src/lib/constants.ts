@@ -25,6 +25,20 @@ export const STATUS_LABELS: Record<Status, string> = {
   COMPLETED: "Completed",
 };
 
+// One-line hints under each choice in the request form, to help people pick.
+export const CATEGORY_HINTS: Record<Category, string> = {
+  IT: "Laptops, access, software, network",
+  HR: "Leave, payroll, contracts, training",
+  ADMINISTRATION: "Facilities, rooms, supplies, travel",
+  OTHER: "Anything that doesn't fit above",
+};
+
+export const PRIORITY_HINTS: Record<Priority, string> = {
+  LOW: "Can wait",
+  MEDIUM: "Needed this week",
+  HIGH: "Blocking my work",
+};
+
 // Ordered lists for selects, filters and charts (declaration order, not alphabetical).
 export const CATEGORIES = Object.values(Category);
 export const PRIORITIES = Object.values(Priority);
