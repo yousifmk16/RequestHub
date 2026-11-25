@@ -8,7 +8,7 @@ import { RequestList } from "@/components/requests/RequestList";
 import { NoMatchingRequests, NoRequestsYet } from "@/components/requests/RequestsEmptyState";
 import { RequestsSkeleton } from "@/components/requests/RequestsSkeleton";
 import { buildRequestsHref, hasActiveFilters } from "@/lib/request-query-url";
-import { listRequests } from "@/lib/services/requests";
+import { countByStatus, listRequests } from "@/lib/services/requests";
 import { parseRequestQuery } from "@/lib/validation";
 
 export const metadata: Metadata = { title: "Requests" };
@@ -28,20 +28,26 @@ export default function RequestsPage({ searchParams }: PageProps<"/requests">) {
 async function RequestsResults({ searchParams }: Pick<PageProps<"/requests">, "searchParams">) {
   await connection(); // always read at request time (docs/decisions.md D4)
   const query = parseRequestQuery(await searchParams);
-  const requests = await listRequests(query);
-  const filtered = hasActiveFilters(query);
+
+  // One query without the status filter feeds both the status chip counts and
+  // the list, so the counts always agree with what the chips will show.
+  const matchingAnyStatus = await listRequests({ ...query, status: undefined });
+  const requests = query.status
+    ? matchingAnyStatus.filter((request) => request.status === query.status)
+    : matchingAnyStatus;
 
   return (
     // Filters mark themselves data-pending while a new list loads; the list dims.
-    <div className="group/requests flex flex-col gap-3">
-      <RequestFilters query={query} />
-      <p className="text-sm text-muted-foreground tabular-nums" aria-live="polite">
-        {countLabel(requests.length, filtered)}
-      </p>
+    <div className="group/requests flex flex-col gap-4">
+      <RequestFilters
+        query={query}
+        statusCounts={countByStatus(matchingAnyStatus)}
+        resultCount={requests.length}
+      />
       <div className="transition-opacity group-has-data-pending/requests:opacity-60">
         {requests.length > 0 ? (
           <RequestList requests={requests} />
-        ) : filtered ? (
+        ) : hasActiveFilters(query) ? (
           <NoMatchingRequests clearHref={buildRequestsHref({ sort: query.sort })} />
         ) : (
           <NoRequestsYet />
@@ -49,9 +55,4 @@ async function RequestsResults({ searchParams }: Pick<PageProps<"/requests">, "s
       </div>
     </div>
   );
-}
-
-function countLabel(count: number, filtered: boolean): string {
-  const noun = count === 1 ? "request" : "requests";
-  return filtered ? `${count} matching ${noun}` : `${count} ${noun}`;
 }
