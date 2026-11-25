@@ -73,6 +73,25 @@ Feeds the README section "Development approach".
   match form field names, so the form shows server errors under the right input
   with no extra mapping.
 
+### D6 — Adopt the Lakeora brand palette
+- **Context:** After the first visual pass, the product owner asked for the
+  colour palette of lakeora.ai.
+- **Options:** A) eyeball colours from screenshots · B) read the site's
+  published CSS custom properties and map them to semantic tokens.
+- **Choice:** B. The site exposes named tokens (`--lakeora-navy`,
+  `--lakeora-red`, slate/navy ramps), so every colour in the app traces back to
+  a brand value. `globals.css` comments name the source token for each one.
+- **Trade-offs:**
+  - White on brand red `#E8372A` is 4.19:1, below WCAG AA. Red surfaces behind
+    text use the brand's darker `#C72C21` (5.5:1). The bright red is kept for
+    marks with no text.
+  - Primary buttons are navy, not red. Red is the brand accent and the
+    destructive colour, so making every button red would blur "main action"
+    with "delete". Only the header's New request button uses red, as on
+    lakeora.ai.
+  - Layout, type (Public Sans) and the routing-tab concept are unchanged; only
+    the palette moved.
+
 ## Template
 
 ### D1 — <decision title>

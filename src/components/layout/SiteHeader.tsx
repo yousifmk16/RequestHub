@@ -25,7 +25,7 @@ export function SiteHeader() {
           <Button
             asChild
             size="lg"
-            className="bg-primary-foreground px-3 text-primary hover:bg-primary-foreground/90 focus-visible:ring-primary-foreground/60"
+            className="rounded-full bg-brand-red-strong px-3.5 text-white hover:bg-brand-red-strong/90 focus-visible:ring-primary-foreground/60 sm:px-4"
           >
             <Link href="/requests/new">
               <PlusIcon />
