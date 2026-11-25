@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { apiRequest } from "@/lib/api-client";
 import { formatRelativeTime } from "@/lib/format";
-import { buildRequestsHref, hasActiveFilters } from "@/lib/request-query-url";
+import { buildExportHref, buildRequestsHref, hasActiveFilters } from "@/lib/request-query-url";
 
 describe("buildRequestsHref", () => {
   it("is plain /requests with no filters or the default sort", () => {
@@ -17,6 +17,19 @@ describe("buildRequestsHref", () => {
 
   it("encodes search text safely", () => {
     expect(buildRequestsHref({ q: "90% & up" })).toBe("/requests?q=90%25+%26+up");
+  });
+});
+
+describe("buildExportHref", () => {
+  it("carries exactly the list's params to the export route", () => {
+    const query = { q: "vpn", category: "IT", status: "NEW", priority: "HIGH", sort: "priority" } as const;
+    expect(buildExportHref(query)).toBe(
+      `/api/requests/export${buildRequestsHref(query).slice("/requests".length)}`,
+    );
+  });
+
+  it("has no query string with no filters", () => {
+    expect(buildExportHref({ sort: "newest" })).toBe("/api/requests/export");
   });
 });
 
