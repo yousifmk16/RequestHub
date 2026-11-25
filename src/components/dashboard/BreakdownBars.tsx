@@ -49,22 +49,24 @@ export function BreakdownBars({ id, title, description, rows, total }: Breakdown
               <li key={row.key}>
                 <Link
                   href={row.href}
-                  aria-label={`${row.label}: ${row.value} ${row.value === 1 ? "request" : "requests"}, ${share}% of all. Show these requests`}
                   className="-mx-2 grid grid-cols-[7.5rem_minmax(0,1fr)_4.5rem] items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring sm:grid-cols-[9rem_minmax(0,1fr)_5rem]"
                 >
                   <span className="flex min-w-0 items-center gap-2 text-sm font-bold">
                     {row.adornment}
                     <span className="truncate">{row.label}</span>
                   </span>
-                  <span className="h-3 overflow-hidden rounded-full bg-secondary">
+                  <span aria-hidden="true" className="h-3 overflow-hidden rounded-full bg-secondary">
                     <span
                       className={cn("block h-full rounded-full", row.barClass)}
                       style={{ width: `${(row.value / largest) * 100}%` }}
                     />
                   </span>
                   <span className="text-end text-sm tabular-nums">
-                    <span className="font-bold">{row.value}</span>
-                    <span className="ms-1.5 text-muted-foreground">{share}%</span>
+                    {/* A real space, not just margin: otherwise "1" and "100%" are read as "1100%". */}
+                    <span className="font-bold">{row.value}</span>{" "}
+                    <span className="text-muted-foreground">{share}%</span>
+                    {/* Read as "HR 8 27% of all requests": visible text first (WCAG 2.5.3). */}
+                    <span className="sr-only"> of all requests</span>
                   </span>
                 </Link>
               </li>

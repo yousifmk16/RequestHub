@@ -69,7 +69,8 @@ export function DeleteRequestButton({
             <Trash2 />
           </Button>
         ) : (
-          <Button variant="destructive" size="lg" className="h-10 px-4">
+          // Solid red with white text: 5.5:1, where the tinted variant failed 4.5:1.
+          <Button size="lg" className="h-10 bg-destructive px-4 text-white hover:bg-destructive/90">
             <Trash2 /> Delete request
           </Button>
         )}
@@ -85,8 +86,8 @@ export function DeleteRequestButton({
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isDeleting}>Keep request</AlertDialogCancel>
           <AlertDialogAction
-            variant="destructive"
             onClick={deleteRequest}
+            className="bg-destructive text-white hover:bg-destructive/90"
             disabled={isDeleting}
             aria-busy={isDeleting}
           >

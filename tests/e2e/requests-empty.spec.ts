@@ -14,7 +14,7 @@ test("requests page invites the first request when there are none", async ({ pag
   await page.goto("/requests");
 
   await expect(page.getByRole("heading", { name: "No requests yet" })).toBeVisible();
-  await expect(page.getByText("0 requests")).toBeVisible();
+  await expect(page.getByText("0 requests", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Create the first request" })).toHaveAttribute(
     "href",
     "/requests/new",

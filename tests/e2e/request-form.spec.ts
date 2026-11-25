@@ -8,7 +8,7 @@ test("an empty submission shows an error under each field and saves nothing (R1)
   await expect(page.getByText("Description is required")).toBeVisible();
   await expect(page.getByText("Choose a department")).toBeVisible();
   await expect(page.getByText("Choose a priority")).toBeVisible();
-  await expect(page.getByLabel("Title")).toBeFocused();
+  await expect(page.getByLabel("Title", { exact: true })).toBeFocused();
   await expect(page).toHaveURL(/\/requests\/new$/);
 });
 
@@ -17,8 +17,8 @@ test("creates a request, then edits it (R1, R3)", async ({ page }, testInfo) => 
   const title = `Replace broken chair (${testInfo.project.name})`;
 
   await page.goto("/requests/new");
-  await page.getByLabel("Title").fill(title);
-  await page.getByLabel("Description").fill("The gas lift on my chair failed and it sinks within minutes.");
+  await page.getByLabel("Title", { exact: true }).fill(title);
+  await page.getByLabel("Description", { exact: true }).fill("The gas lift on my chair failed and it sinks within minutes.");
   await page.getByRole("group", { name: "Department" }).getByText("Administration").click();
   await page.getByRole("group", { name: "Priority" }).getByText("Medium").click();
   await page.getByRole("button", { name: "Create request" }).click();
@@ -29,7 +29,7 @@ test("creates a request, then edits it (R1, R3)", async ({ page }, testInfo) => 
 
   await page.getByRole("link", { name: title, exact: true }).click();
   await expect(page.getByRole("heading", { name: "Edit request" })).toBeVisible();
-  await expect(page.getByLabel("Title")).toHaveValue(title);
+  await expect(page.getByLabel("Title", { exact: true })).toHaveValue(title);
   await page.getByRole("group", { name: "Priority" }).getByText("High").click();
   await page.getByRole("group", { name: "Status" }).getByText("In Progress").click();
   await page.getByRole("button", { name: "Save changes" }).click();

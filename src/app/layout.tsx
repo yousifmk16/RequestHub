@@ -31,7 +31,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <SiteHeader />
-        <main id="main-content" className="flex flex-1 flex-col">
+        {/* tabIndex -1 lets the skip link move keyboard focus here, not just scroll. */}
+        <main id="main-content" tabIndex={-1} className="flex flex-1 flex-col outline-none">
           {children}
         </main>
         {/* Pinned to light until dark mode exists, so toasts never render dark on a light page. */}
