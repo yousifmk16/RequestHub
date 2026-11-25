@@ -17,10 +17,12 @@ test("dashboard totals match the data and link to filtered lists (R7)", async ({
   await page.goto("/");
 
   const glance = page.getByRole("region", { name: "At a glance" });
-  await expect(glance.getByRole("link", { name: /All requests/ })).toContainText(String(all.length));
-  await expect(glance.getByRole("link", { name: /Completed/ })).toContainText(String(completed));
+  // Match accessible names ("Completed 3 60% of all requests"), not raw text,
+  // where the count and percentage run together and "3" would match "30".
+  await expect(glance.getByRole("link", { name: new RegExp(String.raw`^All requests ${all.length} `) })).toBeVisible();
+  await expect(glance.getByRole("link", { name: new RegExp(String.raw`^Completed ${completed} `) })).toBeVisible();
 
-  const itBar = page.getByRole("link", { name: new RegExp(`^IT: ${it} requests?`) });
+  const itBar = page.getByRole("link", { name: new RegExp(String.raw`^IT ${it} \d+% of all requests$`) });
   await expect(itBar).toBeVisible();
   await itBar.click();
   await expect(page).toHaveURL(/\/requests\?category=IT$/);
