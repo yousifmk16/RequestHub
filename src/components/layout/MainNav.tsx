@@ -19,10 +19,10 @@ export function MainNav({ className }: { className?: string }) {
             aria-current={active ? "page" : undefined}
             className={cn(
               // The underline sits on the header's bottom edge, like a tab.
-              "relative flex items-center px-3 text-sm font-medium text-primary-foreground/75 transition-colors hover:text-primary-foreground",
-              "focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-[-6px] focus-visible:outline-primary-foreground",
+              "relative flex items-center px-3 text-sm font-medium text-muted-foreground transition-colors hover:text-brand-navy",
+              "focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-[-8px] focus-visible:outline-ring",
               active &&
-                "text-primary-foreground after:absolute after:inset-x-3 after:bottom-0 after:h-[3px] after:rounded-full after:bg-brand-red",
+                "text-brand-navy after:absolute after:inset-x-3 after:bottom-0 after:h-[3px] after:rounded-full after:bg-brand-red",
             )}
           >
             {label}

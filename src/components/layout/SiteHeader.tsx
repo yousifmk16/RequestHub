@@ -5,17 +5,16 @@ import { MainNav } from "./MainNav";
 import { MobileNav } from "./MobileNav";
 import { RoutingMark } from "./RoutingMark";
 
+// White header with navy type and the red action, as on lakeora.ai.
 export function SiteHeader() {
   return (
-    <header className="bg-primary text-primary-foreground">
-      <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-6 px-4 sm:px-6">
+    <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-8 px-4 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2.5 rounded-md text-[15px] font-extrabold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-foreground"
+          className="flex items-center gap-2.5 rounded-md text-base font-extrabold text-brand-navy focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
         >
-          <span className="grid size-7 place-items-center rounded-md bg-primary-foreground">
-            <RoutingMark className="size-4" />
-          </span>
+          <RoutingMark />
           Request Hub
         </Link>
 
@@ -25,7 +24,7 @@ export function SiteHeader() {
           <Button
             asChild
             size="lg"
-            className="rounded-full bg-brand-red-strong px-3.5 text-white hover:bg-brand-red-strong/90 focus-visible:ring-primary-foreground/60 sm:px-4"
+            className="rounded-full bg-brand-red-strong px-3.5 text-white hover:bg-brand-red-strong/90 sm:px-4"
           >
             <Link href="/requests/new">
               <PlusIcon />
