@@ -118,7 +118,10 @@ tests, and checked its own work in a real browser.
 | **Skills** | `frontend-design` (the visual direction in [design.md](docs/design.md)), `accessibility-review` (the WCAG 2.1 AA audit in [testing.md](docs/testing.md)) |
 | **Project skills** (in `.claude/skills/`) | `add-request-field` walks every layer when a field is added; `pre-submit-review` is a quality checklist |
 | **Bundled framework docs** | Next.js 16 ships its docs in `node_modules/next/dist/docs`. `AGENTS.md` makes reading them a rule before using any Next API, which caught changed APIs (e.g. `retry()` in error boundaries, `connection()` for request-time data) |
-| **MCP config** (`.mcp.json`) | context7, shadcn, next-devtools and Playwright servers are configured for the project. In this build, the bundled docs, installed type definitions, the shadcn CLI and the Playwright test runner covered the same ground |
+| **context7 MCP** | Checked Prisma's libSQL/Turso adapter docs against the code. The top hit was outdated (`PrismaLibSQL`, preview flag), but it also returned the Prisma 7 rename to `PrismaLibSql`. The installed types confirmed the app's `new PrismaLibSql({ url, authToken })`. No change needed |
+| **Playwright MCP** | Smoke-tested the live site: create a test request, change its status, delete it, then confirm it was gone (API 404). All calls succeeded with no console errors |
+| **next-devtools MCP** | Read build and runtime errors from the running dev server after loading the main pages. None found (`get_errors` and `get_compilation_issues` both empty) |
+| **shadcn MCP** (`.mcp.json`) | Configured for the project; in this build the shadcn CLI was used to add components |
 
 **How AI output was checked, not trusted.** Every change ended with lint, types,
 tests and a look in the browser. Several times the obvious answer was wrong and
