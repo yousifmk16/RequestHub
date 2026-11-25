@@ -270,6 +270,16 @@ Feeds the README section "Development approach".
   real cause is logged server-side), so it is safe to expose, and it doubles as
   an uptime check.
 - **Verified against real errors**, not assumed ones (see ai-log).
+- **Correction (found later, while reviewing the project):** the route was
+  being prerendered. With Cache Components a `GET` handler that doesn't read
+  the request follows the page model, and, as in D4, a local SQLite count
+  finished inside the prerender window. A production build served
+  `{"requests":0}` with `s-maxage=31536000` while the database held 5 rows,
+  so in production it would have kept reporting `ok` through an outage. The
+  bundled docs say database queries stop prerendering; D4 had already shown
+  that doesn't hold for fast local SQLite. Fix: `await connection()` first,
+  outside the try. `tests/e2e/health.spec.ts` checks, on a production build,
+  that the count changes after a create.
 
 ### D15 — Dark mode
 - **Choice:** `next-themes` (already a dependency of the shadcn toaster), class
