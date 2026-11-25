@@ -1,5 +1,8 @@
 # Deployment: GitHub → Turso → Vercel
 
+**Live:** https://request-hub-ten.vercel.app (Vercel, deployed from `main`;
+data in Turso).
+
 The app runs on Vercel and stores data in Turso (hosted SQLite/libSQL). The same
 Prisma schema and driver serve the local SQLite file and Turso
 (see decisions.md D1). Total time is about 15 minutes, using free tiers.
