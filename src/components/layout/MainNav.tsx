@@ -2,16 +2,32 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { isActivePath, NAV_LINKS } from "./nav-links";
 
+/**
+ * The pathname is request-time data on dynamic routes (e.g. /requests/[id]/edit),
+ * so reading it must sit inside Suspense. The fallback is the same links without
+ * the active underline, so the prerendered header is fully usable.
+ */
 export function MainNav({ className }: { className?: string }) {
-  const pathname = usePathname();
+  return (
+    <Suspense fallback={<NavLinks activePath={null} className={className} />}>
+      <ActiveNavLinks className={className} />
+    </Suspense>
+  );
+}
 
+function ActiveNavLinks({ className }: { className?: string }) {
+  return <NavLinks activePath={usePathname()} className={className} />;
+}
+
+function NavLinks({ activePath, className }: { activePath: string | null; className?: string }) {
   return (
     <nav aria-label="Main" className={cn("flex items-stretch gap-1 self-stretch", className)}>
       {NAV_LINKS.map(({ href, label }) => {
-        const active = isActivePath(pathname, href);
+        const active = activePath !== null && isActivePath(activePath, href);
         return (
           <Link
             key={href}
