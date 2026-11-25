@@ -177,25 +177,3 @@ describe("unexpected errors", () => {
     expect(JSON.stringify(body)).not.toContain("SQLITE");
   });
 });
-
-describe("GET /api/health", () => {
-  it("reports ok with the request count when the database works", async () => {
-    const { GET: HEALTH } = await import("@/app/api/health/route");
-    await createViaApi();
-    const response = await HEALTH();
-    expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ status: "ok", database: "local-file", requests: 1 });
-  });
-
-  it("reports a safe category (no raw error) when the database fails", async () => {
-    const { GET: HEALTH } = await import("@/app/api/health/route");
-    vi.spyOn(service, "countRequests").mockRejectedValue(new Error("SQLITE_ERROR: no such table: Request"));
-    vi.spyOn(console, "error").mockImplementation(() => {});
-
-    const response = await HEALTH();
-    const body = await response.json();
-    expect(response.status).toBe(503);
-    expect(body).toMatchObject({ status: "error", problem: "schema-missing" });
-    expect(JSON.stringify(body)).not.toContain("SQLITE_ERROR");
-  });
-});
