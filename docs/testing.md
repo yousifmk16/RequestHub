@@ -3,7 +3,7 @@
 ## How to run
 
 ```bash
-npm test            # 116 unit + integration tests (Vitest, real SQLite test file)
+npm test            # 135 unit + integration tests (Vitest, real SQLite test file)
 npm run test:e2e    # end-to-end tests (Playwright), desktop and 375px, on a production build
 npm run lint && npm run typecheck
 ```
@@ -27,6 +27,7 @@ request.
 | **R6** Search + filters + sort combine, in URL, clear, no results | `requests-service.test.ts` (AND, literal `%`/`_`, priority sort), `validation.test.ts` (tolerant URL parsing) | `requests-list.spec.ts` (chips + department + sort + search, reload, clear), `requests-empty.spec.ts` (bad URL values) |
 | **R7** Dashboard totals and breakdowns, current | `requests-service.test.ts` (zero-filled stats), `workload.test.ts` | `dashboard.spec.ts` (totals match API, bar opens filtered list), `requests-list.spec.ts` (dashboard updates after a list change), `requests-empty.spec.ts` |
 | **R8** Persistence | Service tests run against a real SQLite file | Every reload assertion above; fresh-clone run documented in the README |
+| **Extra:** CSV export | `csv.test.ts` (quotes, commas, both line breaks, formula cells, non-ASCII, ISO dates), `export-route.test.ts` (headers, BOM, filters + sort match the list, invalid params, JSON 500), `client-helpers.test.ts` (export URL = list URL params) | `csv-export.spec.ts` (downloads the filtered, priority-sorted view; checks filename, BOM, row order and escaping) |
 
 ## Accessibility audit (WCAG 2.1 AA)
 

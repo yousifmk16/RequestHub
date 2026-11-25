@@ -23,6 +23,15 @@ RequestForm / StatusSelect / DeleteRequestButton   (client)
    ─► toast + router.refresh()   (re-renders the page and the header's workload logo)
 ```
 
+**Exporting** (Export CSV on the list): a plain download link, no client fetch.
+```
+ExportCsvButton ─► buildExportHref(query)          src/lib/request-query-url.ts  (same params as the list URL)
+   ─► GET /api/requests/export?…                    src/app/api/requests/export/route.ts
+   ─► parseRequestQuery ─► listRequests             the same parse + service call as the list page
+   ─► requestsToCsv + UTF-8 BOM                     src/lib/csv.ts  (RFC 4180, formula-safe, D17)
+   ◄─ text/csv; attachment; filename="requests-YYYY-MM-DD.csv"
+```
+
 Rules that keep it simple:
 - Only `src/lib/services/` imports Prisma. Routes and pages never do.
 - One Zod schema module for client and server. Form field names equal the
@@ -45,6 +54,7 @@ src/app/
                          (shared with edit/ below it)
   requests/[id]/edit/    Edit form
   api/requests/**        REST handlers (GET/POST, GET/PATCH/DELETE)
+  api/requests/export/   CSV download of the filtered, sorted list (D17)
   api/health/            Database health check (D14)
 src/lib/
   validation.ts          Zod schemas: create, update, form, URL query
@@ -54,7 +64,8 @@ src/lib/
   api.ts                 Error responses + withErrorHandling for routes
   api-client.ts          Browser-side fetch wrapper
   db.ts, database-config.ts   Prisma client; where the database lives
-  request-query-url.ts   Query ⇄ /requests URL
+  request-query-url.ts   Query ⇄ /requests URL, and the matching export URL
+  csv.ts                 CSV encoding: escaping, BOM, request columns
   workload.ts            The logo's "completed share → lit bars" rule
   format.ts              Relative time, percentages
 src/components/
@@ -78,7 +89,8 @@ scripts/                 Test DB prep, Turso migrations/setup, screenshots
 | Add a status, department or priority value | `enum` in `schema.prisma` + migration; label, hint (and weight for priority) in `constants.ts`; colour/icon in `components/requests/styles.ts`; colour token in `globals.css` |
 | A label or wording | `constants.ts` (labels, hints), the component for UI copy |
 | Colours, fonts, spacing | Tokens in `src/app/globals.css` (see design.md). Run `npm run dev:clean` after editing |
-| A new filter | `requestQuerySchema` (validation), `listRequests` where-clause (service), `buildRequestsHref` (URL), `RequestFilters` (UI) |
+| A new filter | `requestQuerySchema` (validation), `listRequests` where-clause (service), `toQueryString` in `request-query-url.ts` (list and export URLs both use it), `RequestFilters` (UI). CSV export picks it up with no change |
+| CSV columns or format | `REQUEST_COLUMNS` and `requestsToCsv` in `src/lib/csv.ts` (tests in `csv.test.ts`); headers and filename in `api/requests/export/route.ts` |
 | A new sort order | `SORT_OPTIONS` + `SORT_LABELS` (constants), `listRequests` (service) |
 | What the detail page shows | `components/requests/RequestDetail.tsx` (+ `RequestDetailSkeleton.tsx` to keep the same shape); the page itself is `app/requests/[id]/page.tsx` |
 | The "request doesn't exist" screen | `app/requests/[id]/not-found.tsx` (detail and edit pages both use it) |
