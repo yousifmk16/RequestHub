@@ -4,8 +4,10 @@ import { BackLink } from "@/components/layout/BackLink";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/button";
 
-// Shown when the id in the URL matches no request (R3). Next renders this in
-// place of the page, so it brings its own container.
+// Shown when the id in the URL matches no request (R3), on both the detail
+// page and the edit page below it: notFound() renders the nearest not-found
+// file up the tree. Next renders it in place of the page, so it brings its
+// own container.
 export default function RequestNotFound() {
   return (
     <PageContainer className="max-w-3xl">
