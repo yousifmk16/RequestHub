@@ -248,6 +248,18 @@ Feeds the README section "Development approach".
   together with `connection()`. The query runs once per request whichever
   components ask, and the "read at request time" rule (D4) lives in one place.
 
+### D14 — A public /api/health with safe diagnostics
+- **Context:** On the first deploy every database read failed, and the API's
+  generic 500 message (by design) hid the cause. Vercel's runtime logs were
+  hard to reach.
+- **Choice:**  runs one count query and reports
+   + the request count, or  with one of ,
+  , ,  and a fixed hint.
+- **Why public:** it never returns the URL, the token or the raw error (the
+  real cause is logged server-side), so it is safe to expose, and it doubles as
+  an uptime check.
+- **Verified against real errors**, not assumed ones (see ai-log).
+
 ## Template
 
 ### D1 — <decision title>
