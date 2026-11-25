@@ -81,29 +81,42 @@ pill), and coral (HR) differs from High priority both in hue and in form
 ## Layout
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ ■ Request Hub    Dashboard   Requests          [ New request ] │  ink band
+│ ▮ Request Hub    Dashboard   Requests        ( + New request ) │  white header
+│                  ‾‾‾‾‾‾‾‾‾ red underline on the active page     │  (sticky)
 ├─────────────────────────────────────────────────────────────┤
-│  Requests                                       30 requests  │  desk bg
+│ Every request, from submitted to solved.            ▂▄▆█    │  navy hero band
+│ See what's open across IT, HR and Administration…            │  (dashboard only)
+│ ( + New request )  ( View all requests )                     │
+├─────────────────────────────────────────────────────────────┤
+│  Requests                                       30 requests  │  slate-10 page
 │  ┌───────────────────────────────────────────────────────┐  │
-│  │ [ Search title or description ] [Category][Status]... │  │  paper
-│  ├───────────────────────────────────────────────────────┤  │
-│  │▌ VPN drops every hour on office Wi-Fi   ▮▮▮ High  ◔ New │  │  ruled rows,
-│  │▌ Update emergency contact details       ▮   Low   ○ New │  │  routing tab
-│  └───────────────────────────────────────────────────────┘  │  on the left
+│  │▌ VPN drops every hour on office Wi-Fi   ▮▮▮ High  ◔ New │  │  white surface,
+│  │▌ Update emergency contact details       ▮   Low   ○ New │  │  ruled rows
+│  └───────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
 ```
-- Left-aligned content in a max 72rem column. The page title row holds the
-  title and the one primary action.
-- Mobile (375px): the header collapses to wordmark + menu button + "New" icon
-  button. Rows become stacked blocks that keep the routing tab.
+- **Header:** white, as on lakeora.ai: navy wordmark and links, a red underline
+  on the active page, and the red pill for the main action. It stays visible
+  while scrolling.
+- **Logo mark:** four department bars rising left to right (a queue being
+  worked through) on a navy tile. The same shape is the favicon.
+- **Dashboard hero:** a full-width navy band with the headline, a short
+  description and two pill actions. The large rising bars on the right are
+  the app's one orchestrated motion: they grow once on load (skipped with
+  reduced motion) and are hidden on small screens.
+- Content sits in `PageContainer` (max 72rem, left-aligned) inside each page,
+  not the root layout, so a page can add full-width bands.
+- Mobile (375px): the header collapses to the mark and wordmark, a round red
+  "+" button and the menu. Rows become stacked blocks that keep the routing tab.
 
 ## Principles
 1. Colour is information: department = routing tab, urgency = signal bars,
    progress = status icon. No decorative gradients or shadows.
 2. Radius follows hierarchy: controls and surfaces share the 10px base
    (`--radius`), the logo tile is smaller, and status pills are fully round.
-3. Motion only answers actions (menu opening, dialog, toast). There are no
-   entrance animations, and `prefers-reduced-motion` is respected.
+3. Motion answers actions (menu opening, dialog, toast). The single exception
+   is the hero bars growing once on the dashboard. `prefers-reduced-motion`
+   is respected everywhere.
 4. Copy names what happens: "Create request" makes a toast saying "Request
    created".
 
