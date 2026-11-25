@@ -76,3 +76,13 @@ describe("apiRequest", () => {
     expect(await apiRequest("/api/requests")).toMatchObject({ ok: false, status: 502, error: "Something went wrong. Please try again." });
   });
 });
+
+describe("percentOf", () => {
+  it("rounds to a whole percent and handles an empty total", async () => {
+    const { percentOf } = await import("@/lib/format");
+    expect(percentOf(14, 30)).toBe(47);
+    expect(percentOf(1, 3)).toBe(33);
+    expect(percentOf(0, 0)).toBe(0);
+    expect(percentOf(5, 5)).toBe(100);
+  });
+});
