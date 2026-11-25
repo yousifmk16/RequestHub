@@ -210,8 +210,10 @@ Feeds the README section "Development approach".
   field says "required" once (Zod `abort`) instead of "too short", and the
   message says "department" to match the UI's word for category.
 - **Unsaved changes:** `beforeunload` covers closing or reloading the tab.
-  Cancel asks before discarding. The App Router has no API to block other
-  in-app navigations, which is a known limitation.
+  Every in-app link (header, logo, back link, Cancel) asks before discarding.
+  The App Router has no blocking API, so a document-level click listener in
+  the capture phase runs before Next's `<Link>` and cancels the click if the
+  user declines. The browser's back/forward buttons aren't covered.
 - **Missing request → 404 page, but HTTP 200.** With Cache Components, the
   prerendered shell starts the response with `200`, and `notFound()` inside
   the page runs after that, so the status can't change. Even
@@ -220,6 +222,15 @@ Feeds the README section "Development approach".
   would need a database lookup in `proxy.ts` on every edit URL. That's a
   second data path for a status code no user sees, so it wasn't added. R3
   ("shows a 404 page") is met, and the API returns real 404s.
+- **Tried later, on a production build, and reverted:**
+  - A `proxy.ts` that checks the id and calls `NextResponse.rewrite(url, { status: 404 })`:
+    the rewrite ignores `status`, and the response stayed 200.
+  - Rewriting to a page that always calls `notFound()`: still 200. That page
+    is a partial prerender too, because the shared layout holds the live
+    header logo (request-time data), so every page streams its shell first.
+  - The only remaining option was for the proxy to fetch the not-found HTML
+    and re-send it with a 404: a self-request per miss, with loop and cost
+    risks, for a status code no user sees. Not worth it.
 
 ### D12 — Dashboard charts as HTML bars, not Recharts
 - **Context:** R7 asks for breakdowns by department and by priority. The

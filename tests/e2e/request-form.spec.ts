@@ -44,3 +44,24 @@ test("editing a request that doesn't exist shows the not-found page (R3)", async
   await expect(page.getByRole("heading", { name: "This request doesn't exist" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Go to all requests" })).toBeVisible();
 });
+
+test("in-app links ask before discarding unsaved changes", async ({ page }) => {
+  // A clean form leaves without asking.
+  await page.goto("/requests/new");
+  await page.getByRole("link", { name: "All requests" }).click();
+  await expect(page).toHaveURL(/\/requests$/);
+
+  await page.goto("/requests/new");
+  await page.getByLabel("Title", { exact: true }).fill("Half-written request");
+
+  // Dismissing keeps the user on the form with their text intact.
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await page.getByRole("link", { name: "All requests" }).click();
+  await expect(page).toHaveURL(/\/requests\/new$/);
+  await expect(page.getByLabel("Title", { exact: true })).toHaveValue("Half-written request");
+
+  // Accepting leaves.
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.getByRole("link", { name: "All requests" }).click();
+  await expect(page).toHaveURL(/\/requests$/);
+});

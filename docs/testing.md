@@ -19,7 +19,7 @@ request.
 
 | Requirement | Unit / integration | End-to-end |
 |---|---|---|
-| **R1** Create, validation, server rejects bad input | `validation.test.ts`, `api-routes.test.ts` (400 on bypass, malformed JSON) | `request-form.spec.ts` (empty submit: errors under each field, focus, nothing saved; create succeeds), `keyboard.spec.ts` (keyboard-only create) |
+| **R1** Create, validation, server rejects bad input | `validation.test.ts`, `api-routes.test.ts` (400 on bypass, malformed JSON) | `request-form.spec.ts` (empty submit: errors under each field, focus, nothing saved; create succeeds; in-app links ask before discarding changes), `keyboard.spec.ts` (keyboard-only create) |
 | **R2** List, newest first, empty state, mobile | `requests-service.test.ts` (ordering) | `requests-empty.spec.ts`, every spec also runs at 375px, `reflow.spec.ts` (320px) |
 | **R3** Edit, same validation, missing → 404 page | `api-routes.test.ts` (PATCH rules, 404) | `request-form.spec.ts` (edit flow, not-found page) |
 | **R4** Delete with confirmation | `api-routes.test.ts` (204, then 404) | `requests-list.spec.ts` (cancel keeps it, confirm removes it, API 404 afterwards) |
