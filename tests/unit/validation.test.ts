@@ -13,7 +13,9 @@ const validInput = {
   priority: "HIGH",
 };
 
-function fieldErrors(result: { success: boolean; error?: z.ZodError }) {
+function fieldErrors(
+  result: { success: boolean; error?: z.ZodError },
+): Record<string, string[] | undefined> {
   return result.error ? z.flattenError(result.error).fieldErrors : {};
 }
 
