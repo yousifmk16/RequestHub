@@ -14,8 +14,9 @@ IT, HR and Administration.
 </p>
 
 <details>
-<summary>More screenshots: requests list and new-request form (desktop)</summary>
+<summary>More screenshots: dark mode, requests list and new-request form (desktop)</summary>
 
+![Dashboard in dark mode](docs/screenshots/dashboard-dark.png)
 ![Requests list with status chips, filters and the department routing tabs](docs/screenshots/requests-desktop.png)
 ![New request form with department and priority cards](docs/screenshots/new-request-desktop.png)
 
