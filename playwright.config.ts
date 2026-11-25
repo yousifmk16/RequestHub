@@ -22,10 +22,11 @@ export default defineConfig({
     { name: "mobile", use: { ...devices["Pixel 7"], viewport: { width: 375, height: 812 } } },
   ],
   webServer: {
-    command: `node scripts/prepare-test-db.mjs prisma/e2e.db && npx next dev --port ${PORT}`,
+    // A production build, closer to what is deployed than the dev server.
+    command: `node scripts/prepare-test-db.mjs prisma/e2e.db && npx next build && npx next start --port ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-    env: { DATABASE_URL: E2E_DATABASE_URL },
+    timeout: 240_000,
+    env: { DATABASE_URL: E2E_DATABASE_URL, NEXT_DIST_DIR: ".next-e2e" },
   },
 });
