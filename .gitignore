@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# local SQLite database (recreated automatically by `npm run dev`)
+/prisma/*.db
+/prisma/*.db-journal
+
+# allow the documented example env file
+!.env.example
