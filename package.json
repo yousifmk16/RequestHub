@@ -4,17 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "predev": "prisma migrate deploy",
+    "predev": "prisma migrate deploy && tsx prisma/seed.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:reset": "prisma migrate reset --force",
+    "db:reset": "prisma migrate reset --force && tsx prisma/seed.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "db:seed": "tsx prisma/seed.ts --force"
   },
   "dependencies": {
     "@prisma/adapter-libsql": "7.10.1",
