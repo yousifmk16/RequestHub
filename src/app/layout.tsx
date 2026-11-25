@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Public_Sans } from "next/font/google";
+import { Almarai } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const publicSans = Public_Sans({
-  variable: "--font-public-sans",
+const almarai = Almarai({
+  variable: "--font-almarai",
+  // Only Latin is preloaded; the Arabic faces are still declared (unicode-range)
+  // and download only when Arabic text appears, e.g. in the planned RTL mode.
   subsets: ["latin"],
+  weight: ["400", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${publicSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${almarai.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <a
           href="#main-content"
