@@ -13,6 +13,7 @@
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force && tsx prisma/seed.ts",
+    "db:deploy": "node scripts/db-deploy.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.1",
+    "@libsql/client": "^0.17.4",
     "@playwright/test": "^1.65.1",
     "@tailwindcss/turbopack": "4.3.3",
     "@types/node": "^24.19.3",
