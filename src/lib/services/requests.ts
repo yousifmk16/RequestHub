@@ -69,6 +69,11 @@ export async function listRecentRequests(limit = 5): Promise<Request[]> {
   return db.request.findMany({ orderBy: { createdAt: "desc" }, take: limit });
 }
 
+/** Cheapest real query: proves the connection, the credentials and the schema. */
+export async function countRequests(): Promise<number> {
+  return db.request.count();
+}
+
 export async function getRequest(id: string): Promise<Request | null> {
   return db.request.findUnique({ where: { id } });
 }
