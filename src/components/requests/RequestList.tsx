@@ -1,0 +1,90 @@
+import { Pencil } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import type { Request } from "@/lib/services/requests";
+import { cn } from "@/lib/utils";
+import { CategoryLabel } from "./CategoryLabel";
+import { DeleteRequestButton } from "./DeleteRequestButton";
+import { PriorityIndicator } from "./PriorityIndicator";
+import { RelativeTime } from "./RelativeTime";
+import { StatusSelect } from "./StatusSelect";
+import { CATEGORY_TAB_CLASS } from "./styles";
+
+// One layout for every width: a column grid from md up, stacked rows below.
+// Rendering each request once (not a table plus mobile cards) keeps a single
+// status control and delete button per request.
+const COLUMNS = "md:grid-cols-[minmax(0,1fr)_8.5rem_6.5rem_9.5rem_6.5rem_5rem]";
+
+export function RequestList({ requests }: { requests: Request[] }) {
+  return (
+    <div className="overflow-hidden rounded-xl border bg-card">
+      <div
+        aria-hidden="true"
+        className={cn(
+          "hidden gap-x-4 border-b bg-muted/60 py-2.5 ps-6 pe-3 text-xs font-medium text-muted-foreground md:grid",
+          COLUMNS,
+        )}
+      >
+        <span>Request</span>
+        <span>Department</span>
+        <span>Priority</span>
+        <span>Status</span>
+        <span>Created</span>
+        <span className="sr-only">Actions</span>
+      </div>
+      <ul aria-label="Requests" className="divide-y">
+        {requests.map((request) => (
+          <RequestRow key={request.id} request={request} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function RequestRow({ request }: { request: Request }) {
+  const editHref = `/requests/${request.id}/edit`;
+
+  return (
+    <li
+      className={cn(
+        "relative grid gap-x-4 gap-y-2.5 py-3.5 ps-6 pe-3 transition-colors hover:bg-muted/40 md:items-center",
+        COLUMNS,
+      )}
+    >
+      {/* The department routing tab. */}
+      <span
+        aria-hidden="true"
+        className={cn("absolute inset-y-2.5 start-2 w-1 rounded-full", CATEGORY_TAB_CLASS[request.category])}
+      />
+
+      <div className="min-w-0">
+        <Link
+          href={editHref}
+          title={request.title}
+          className="line-clamp-2 font-bold [overflow-wrap:anywhere] hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:line-clamp-1"
+        >
+          {request.title}
+        </Link>
+        <p className="mt-0.5 line-clamp-2 text-sm text-muted-foreground [overflow-wrap:anywhere] md:line-clamp-1">
+          {request.description}
+        </p>
+      </div>
+
+      {/* Stacked meta on mobile; becomes grid cells from md up. */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 md:contents">
+        <CategoryLabel category={request.category} />
+        <PriorityIndicator priority={request.priority} />
+        <StatusSelect requestId={request.id} requestTitle={request.title} status={request.status} />
+        <RelativeTime date={request.createdAt} className="text-sm text-muted-foreground tabular-nums" />
+        <div className="ms-auto flex items-center gap-0.5 md:justify-end">
+          <Button asChild variant="ghost" size="icon" className="text-muted-foreground">
+            <Link href={editHref} aria-label={`Edit ${request.title}`}>
+              <Pencil />
+            </Link>
+          </Button>
+          <DeleteRequestButton requestId={request.id} requestTitle={request.title} />
+        </div>
+      </div>
+    </li>
+  );
+}
