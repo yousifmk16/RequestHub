@@ -20,7 +20,7 @@ export function MobileNav({ className }: { className?: string }) {
           variant="ghost"
           size="icon-lg"
           aria-label="Open menu"
-          className={cn("text-brand-navy", className)}
+          className={cn("text-white hover:bg-white/10 hover:text-white", className)}
         >
           <MenuIcon />
         </Button>

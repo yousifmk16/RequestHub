@@ -1,20 +1,26 @@
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
+import { LiveWorkloadMark } from "@/components/brand/LiveWorkloadMark";
+import { WorkloadMark } from "@/components/brand/WorkloadMark";
 import { Button } from "@/components/ui/button";
 import { MainNav } from "./MainNav";
 import { MobileNav } from "./MobileNav";
-import { RoutingMark } from "./RoutingMark";
 
-// White header with navy type and the red action, as on lakeora.ai.
+// Lakeora-navy header. The logo is a live workload meter (see src/lib/workload.ts).
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+    <header className="sticky top-0 z-40 bg-brand-navy text-white">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-8 px-4 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2.5 rounded-md text-base font-extrabold text-brand-navy focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          className="flex items-center gap-2.5 rounded-md text-base font-extrabold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
         >
-          <RoutingMark />
+          {/* Reading the counts is the only uncached work in the header; the
+              plain mark shows until it arrives, so the header never waits. */}
+          <Suspense fallback={<WorkloadMark />}>
+            <LiveWorkloadMark />
+          </Suspense>
           Request Hub
         </Link>
 
@@ -24,7 +30,7 @@ export function SiteHeader() {
           <Button
             asChild
             size="lg"
-            className="rounded-full bg-brand-red-strong px-3.5 text-white hover:bg-brand-red-strong/90 sm:px-4"
+            className="rounded-full bg-brand-red-strong px-3.5 text-white hover:bg-brand-red-strong/90 focus-visible:ring-white/60 sm:px-4"
           >
             <Link href="/requests/new">
               <PlusIcon />
