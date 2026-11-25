@@ -2,7 +2,7 @@
 
 ## The two paths
 
-**Reading** (list, dashboard, edit page): server components, no client fetch.
+**Reading** (list, dashboard, detail and edit pages): server components, no client fetch.
 ```
 page.tsx ─► connection()  (read at request time, D4)
          ─► parseRequestQuery(searchParams)   src/lib/validation.ts  (tolerant)
@@ -41,7 +41,9 @@ src/app/
   page.tsx               Dashboard
   requests/page.tsx      List + filters
   requests/new/          Create form
-  requests/[id]/edit/    Edit form + request-specific not-found page
+  requests/[id]/         Read-only detail page + the request not-found page
+                         (shared with edit/ below it)
+  requests/[id]/edit/    Edit form
   api/requests/**        REST handlers (GET/POST, GET/PATCH/DELETE)
   api/health/            Database health check (D14)
 src/lib/
@@ -58,7 +60,7 @@ src/lib/
 src/components/
   layout/                Header, nav, page container
   brand/                 The workload logo
-  requests/              List, filters, chips, status select, delete, badges
+  requests/              List, detail view, filters, chips, status select, delete, badges
   requests/form/         RequestForm and its building blocks
   dashboard/             Hero, stat cards, breakdown bars, latest requests
   ui/                    shadcn components (generated)
@@ -78,6 +80,8 @@ scripts/                 Test DB prep, Turso migrations/setup, screenshots
 | Colours, fonts, spacing | Tokens in `src/app/globals.css` (see design.md). Run `npm run dev:clean` after editing |
 | A new filter | `requestQuerySchema` (validation), `listRequests` where-clause (service), `buildRequestsHref` (URL), `RequestFilters` (UI) |
 | A new sort order | `SORT_OPTIONS` + `SORT_LABELS` (constants), `listRequests` (service) |
+| What the detail page shows | `components/requests/RequestDetail.tsx` (+ `RequestDetailSkeleton.tsx` to keep the same shape); the page itself is `app/requests/[id]/page.tsx` |
+| The "request doesn't exist" screen | `app/requests/[id]/not-found.tsx` (detail and edit pages both use it) |
 | A dashboard number or breakdown | `getRequestStats` (service) → `StatCards` / `Breakdowns` |
 | A new API endpoint | `src/app/api/...`; validate with a schema from `validation.ts`, call a service function, wrap with `withErrorHandling` |
 | Demo data | `prisma/seed-data.ts` (tests check every row passes validation), then `npm run db:seed` |

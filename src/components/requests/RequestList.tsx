@@ -42,7 +42,8 @@ export function RequestList({ requests }: { requests: Request[] }) {
 }
 
 function RequestRow({ request }: { request: Request }) {
-  const editHref = `/requests/${request.id}/edit`;
+  const detailHref = `/requests/${request.id}`;
+  const editHref = `${detailHref}/edit`;
 
   return (
     <li
@@ -61,7 +62,7 @@ function RequestRow({ request }: { request: Request }) {
 
       <div className="min-w-0">
         <Link
-          href={editHref}
+          href={detailHref}
           title={request.title}
           className="line-clamp-2 text-[1.0625rem] leading-snug font-bold [overflow-wrap:anywhere] hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >

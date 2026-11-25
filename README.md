@@ -42,9 +42,9 @@ Screenshots are taken from the live site by `node scripts/capture-screenshots.mj
 | Requirement | How it works |
 |---|---|
 | **Create** a request | Form with title, description, department (IT, HR, Administration, Other) and priority (Low, Medium, High). Errors appear under each field. The server re-validates with the same rules, so bad input is rejected even if the browser is bypassed. |
-| **View** all requests | One responsive list, newest first: a coloured department tab, title and description preview, priority bars, status, and a relative time ("3 hours ago", exact date on hover). |
-| **Edit and delete** | The same form, pre-filled. Delete asks for confirmation and names the request. A missing request shows a not-found page. |
-| **Update status** | New / In Progress / Completed, changed straight from the list. The change shows at once, rolls back with an explanation if saving fails, and persists after a reload. |
+| **View** all requests | One responsive list, newest first: a coloured department tab, title and description preview, priority bars, status, and a relative time ("3 hours ago", exact date on hover). Each title opens a read-only detail page with the full description, both timestamps and the status control. |
+| **Edit and delete** | The same form, pre-filled, from the pencil icon or the detail page. Delete asks for confirmation and names the request. A missing request shows a not-found page. |
+| **Update status** | New / In Progress / Completed, changed straight from the list or the detail page. The change shows at once, rolls back with an explanation if saving fails, and persists after a reload. |
 | **Search and filter** | Search over title and description, status chips with live counts, department and priority filters, and sort (newest, oldest, highest priority). Everything combines and lives in the URL, so a view survives a refresh and can be shared. |
 | **Dashboard** | Totals per status, breakdowns by department and priority (each bar opens the filtered list), and the latest requests. Always current. |
 | **Persistence** | Data lives in a database: SQLite locally, Turso (hosted SQLite) in production. It survives refreshes, restarts and other devices. |
@@ -80,7 +80,7 @@ No `.env` file is needed.
 | `npm run dev` | Start the app (creates and seeds the local database if needed) |
 | `npm run dev:clean` | Clear `.next` and start. Use it after editing theme tokens or switching branches |
 | `npm test` | 116 unit and integration tests (Vitest, against a real SQLite test file) |
-| `npm run test:e2e` | 68 end-to-end runs (34 tests × desktop and 375px, both themes, on a production build) |
+| `npm run test:e2e` | 86 end-to-end runs (43 tests × desktop and 375px, both themes, on a production build) |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript strict |
 | `npm run db:seed` | Replace the local data with fresh demo data |
 | `npm run db:deploy` | Apply migrations to the production Turso database ([deployment guide](docs/deployment.md)) |
@@ -125,7 +125,7 @@ tests, and checked its own work in a real browser.
 
 **How AI output was checked, not trusted.** Every change ended with lint, types,
 tests and a look in the browser. Several times the obvious answer was wrong and
-the checks caught it. [docs/ai-log.md](docs/ai-log.md) records **27** of these
+the checks caught it. [docs/ai-log.md](docs/ai-log.md) records **36** of these
 moments: what the AI got wrong, how it was caught, and the fix. A few examples:
 
 - The npm `latest` tag for the Prisma CLI pointed at a **release candidate**,
@@ -162,8 +162,8 @@ UI ──► API route ──► Zod validation ──► service ──► Pris
 See [architecture.md](docs/architecture.md) for the full map, including where
 to change what.
 
-**Decisions are written down.** [decisions.md](docs/decisions.md) has 15
-entries (D1–D15), each with the options considered and the trade-off. Examples:
+**Decisions are written down.** [decisions.md](docs/decisions.md) has 16
+entries (D1–D16), each with the options considered and the trade-off. Examples:
 SQLite instead of Postgres for zero-setup cloning, HTML bars instead of a
 chart library, and why a missing request's page returns HTTP 200.
 
@@ -210,6 +210,10 @@ WCAG scans, keyboard-only flows and 320px reflow. The R1–R8 coverage map is in
 - **No manual screen-reader session** (NVDA, VoiceOver). Names and roles were
   checked through the accessibility tree and axe.
 - Search is case-insensitive for English letters only (SQLite `LIKE`).
+- **Exact dates use the server's time zone** (UTC in production). This
+  affects the dates under the relative times on the detail page and in hover
+  tooltips. The relative times ("3 hours ago") are correct everywhere
+  ([D16](docs/decisions.md)).
 
 **Future improvements**
 1. Sign-in with roles (employee / support agent), "my requests", and assignment
@@ -230,7 +234,7 @@ WCAG scans, keyboard-only flows and 320px reflow. The R1–R8 coverage map is in
 | [docs/requirements.md](docs/requirements.md) | Data model and R1–R8 with acceptance checks |
 | [docs/plan.md](docs/plan.md) | The phased build plan |
 | [docs/architecture.md](docs/architecture.md) | Data flow, folder map, where to change what |
-| [docs/decisions.md](docs/decisions.md) | D1–D15: technical decisions with options and trade-offs |
+| [docs/decisions.md](docs/decisions.md) | D1–D16: technical decisions with options and trade-offs |
 | [docs/design.md](docs/design.md) | Visual direction, palette and type, with sources |
 | [docs/testing.md](docs/testing.md) | Test coverage per requirement and the accessibility audit |
 | [docs/ai-log.md](docs/ai-log.md) | Where AI output was wrong, how it was caught, and the fix |
