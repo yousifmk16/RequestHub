@@ -192,6 +192,35 @@ Feeds the README section "Development approach".
   because someone else already deleted it. Initial focus is on
   "Keep request", the safe choice.
 
+### D11 — Create/edit form
+- **One form, one schema.** `RequestForm` handles both modes. It validates with
+  `requestFormSchema`, which is the create rules plus an optional status, so
+  there's no casting between two resolver types. On edit, status is a radio
+  group that starts on the current value and can't be cleared. The API
+  re-validates everything anyway (create ignores status, PATCH checks it).
+- **Native radios as cards** for department, priority and status, instead of
+  a select or a custom listbox. Arrow keys, focus, `fieldset`/`legend`
+  grouping and screen-reader naming all come from the platform. The cards
+  reuse the list's visuals (routing tab, signal bars, status icon) plus a
+  one-line hint ("Laptops, access, software, network").
+- **Errors.** Client errors appear when a field is left (`mode: "onTouched"`)
+  and on submit, which also focuses the first invalid field. Server `400`
+  field errors are mapped onto the same fields with `setError`, so a request
+  that bypassed the client still shows messages in the right place. A blank
+  field says "required" once (Zod `abort`) instead of "too short", and the
+  message says "department" to match the UI's word for category.
+- **Unsaved changes:** `beforeunload` covers closing or reloading the tab.
+  Cancel asks before discarding. The App Router has no API to block other
+  in-app navigations, which is a known limitation.
+- **Missing request → 404 page, but HTTP 200.** With Cache Components, the
+  prerendered shell starts the response with `200`, and `notFound()` inside
+  the page runs after that, so the status can't change. Even
+  `instant = false` doesn't help, per the bundled Next docs. Next adds
+  `<meta name="robots" content="noindex">` to these pages. A true `404` status
+  would need a database lookup in `proxy.ts` on every edit URL. That's a
+  second data path for a status code no user sees, so it wasn't added. R3
+  ("shows a 404 page") is met, and the API returns real 404s.
+
 ## Template
 
 ### D1 — <decision title>
