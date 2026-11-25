@@ -84,7 +84,7 @@ No `.env` file is needed.
 | `npm run dev` | Start the app (creates and seeds the local database if needed) |
 | `npm run dev:clean` | Clear `.next` and start. Use it after editing theme tokens or switching branches |
 | `npm test` | 135 unit and integration tests (Vitest, against a real SQLite test file) |
-| `npm run test:e2e` | 88 end-to-end runs (44 tests × desktop and 375px, both themes, on a production build) |
+| `npm run test:e2e` | 90 end-to-end runs (45 tests × desktop and 375px, both themes, on a production build) |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript strict |
 | `npm run db:seed` | Replace the local data with fresh demo data |
 | `npm run db:deploy` | Apply migrations to the production Turso database ([deployment guide](docs/deployment.md)) |
@@ -129,7 +129,7 @@ tests, and checked its own work in a real browser.
 
 **How AI output was checked, not trusted.** Every change ended with lint, types,
 tests and a look in the browser. Several times the obvious answer was wrong and
-the checks caught it. [docs/ai-log.md](docs/ai-log.md) records **37** of these
+the checks caught it. [docs/ai-log.md](docs/ai-log.md) records **38** of these
 moments: what the AI got wrong, how it was caught, and the fix. A few examples:
 
 - The npm `latest` tag for the Prisma CLI pointed at a **release candidate**,
