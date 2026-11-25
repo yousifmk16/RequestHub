@@ -129,7 +129,7 @@ tests, and checked its own work in a real browser.
 
 **How AI output was checked, not trusted.** Every change ended with lint, types,
 tests and a look in the browser. Several times the obvious answer was wrong and
-the checks caught it. [docs/ai-log.md](docs/ai-log.md) records **38** of these
+the checks caught it. [docs/ai-log.md](docs/ai-log.md) records **39** of these
 moments: what the AI got wrong, how it was caught, and the fix. A few examples:
 
 - The npm `latest` tag for the Prisma CLI pointed at a **release candidate**,
@@ -174,7 +174,7 @@ chart library, and why a missing request's page returns HTTP 200.
 **Version control.** Each phase was built on its own branch and merged into
 `main` with `--no-ff`, so the history reads phase by phase. Commits are small
 Conventional Commits (`feat`, `fix`, `test`, `docs`, …), each with a message
-explaining *why*. 131 commits in total.
+explaining *why*. 137 commits in total.
 
 **Testing.** Unit tests for rules and helpers. Integration tests run the service
 and route handlers against a real SQLite file. End-to-end tests cover every
