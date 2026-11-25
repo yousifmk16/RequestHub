@@ -15,6 +15,7 @@ import {
 } from "@/lib/constants";
 import { buildRequestsHref, hasActiveFilters } from "@/lib/request-query-url";
 import type { RequestQuery } from "@/lib/validation";
+import { ExportCsvButton } from "./ExportCsvButton";
 import { FilterSelect } from "./FilterSelect";
 import { SearchField } from "./SearchField";
 import { StatusChips } from "./StatusChips";
@@ -130,15 +131,19 @@ export function RequestFilters({ query, statusCounts, resultCount }: RequestFilt
             </Button>
           )}
         </div>
-        <FilterSelect
-          id="request-sort"
-          label="Sort"
-          allLabel={SORT_LABELS.newest}
-          value={current.sort === "newest" ? undefined : current.sort}
-          options={SORT_OPTIONS.filter((sort) => sort !== "newest").map((value) => ({ value, label: SORT_LABELS[value] }))}
-          onChange={(sort) => navigate({ ...current, sort: (sort ?? "newest") as RequestQuery["sort"] })}
-          className="w-44"
-        />
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Built from the optimistic query, so it matches the controls even mid-load. */}
+          {resultCount > 0 && <ExportCsvButton query={current} />}
+          <FilterSelect
+            id="request-sort"
+            label="Sort"
+            allLabel={SORT_LABELS.newest}
+            value={current.sort === "newest" ? undefined : current.sort}
+            options={SORT_OPTIONS.filter((sort) => sort !== "newest").map((value) => ({ value, label: SORT_LABELS[value] }))}
+            onChange={(sort) => navigate({ ...current, sort: (sort ?? "newest") as RequestQuery["sort"] })}
+            className="w-44"
+          />
+        </div>
       </div>
     </div>
   );
