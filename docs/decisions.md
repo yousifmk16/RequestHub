@@ -260,6 +260,20 @@ Feeds the README section "Development approach".
   an uptime check.
 - **Verified against real errors**, not assumed ones (see ai-log).
 
+### D15 — Dark mode
+- **Choice:** `next-themes` (already a dependency of the shadcn toaster), class
+  strategy, default = device setting, with a Light / Dark / Device setting menu.
+  It applies the theme before first paint (no flash) and persists the choice.
+- **Tokens, not overrides:** components use semantic tokens; only the
+  `.dark` block changes values. Two roles were split out to make that work:
+  `--selected` (navy vs near-white) and `--accent-text` (red text vs red
+  surfaces).
+- **Checked:** every dark pairing computed (testing.md), and the axe scan
+  runs on every page and state in dark mode too.
+- **Trade-off:** `suppressHydrationWarning` on `<html>`, because the theme
+  class is set before React hydrates. The header icon (sun or moon) is chosen
+  by CSS, so nothing else differs between the server and the client.
+
 ## Template
 
 ### D1 — <decision title>

@@ -20,6 +20,10 @@ async function expectNoViolations(page: Page) {
   expect(summary).toEqual([]);
 }
 
+// Measure colours as they settle, not mid fade-in: with reduced motion the app's
+// own CSS finishes animations instantly (a half-faded dialog fails contrast).
+test.use({ reducedMotion: "reduce" });
+
 let editUrl: string;
 
 test.beforeAll(async ({ request }, testInfo) => {
@@ -47,6 +51,33 @@ for (const [name, url, ready] of PAGES) {
     await expectNoViolations(page);
   });
 }
+
+// The theme follows the device by default, so emulating a dark device puts
+// every page in dark mode; colour contrast is re-checked against dark tokens.
+test.describe("dark mode", () => {
+  test.use({ colorScheme: "dark" });
+
+  for (const [name, url, ready] of [...PAGES, ["edit form", "", "Edit request"] as const]) {
+    test(`${name} has no WCAG 2.1 AA violations in dark mode`, async ({ page }) => {
+      await page.goto(url || editUrl);
+      await expect(page.getByRole("heading", { name: ready })).toBeVisible();
+      await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+      await expectNoViolations(page);
+    });
+  }
+
+  test("form errors and the open delete dialog have no violations in dark mode", async ({ page }) => {
+    await page.goto("/requests/new");
+    await page.getByRole("button", { name: "Create request" }).click();
+    await expect(page.getByText("Title is required")).toBeVisible();
+    await expectNoViolations(page);
+
+    await page.goto(editUrl);
+    await page.getByRole("button", { name: "Delete request" }).click();
+    await expect(page.getByRole("alertdialog")).toBeVisible();
+    await expectNoViolations(page);
+  });
+});
 
 test("edit form has no violations", async ({ page }) => {
   await page.goto(editUrl);

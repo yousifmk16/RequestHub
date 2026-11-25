@@ -5,12 +5,13 @@ import { LiveWorkloadMark } from "@/components/brand/LiveWorkloadMark";
 import { WorkloadMark } from "@/components/brand/WorkloadMark";
 import { Button } from "@/components/ui/button";
 import { MainNav } from "./MainNav";
+import { ThemeMenu } from "@/components/theme/ThemeMenu";
 import { MobileNav } from "./MobileNav";
 
 // Lakeora-navy header. The logo is a live workload meter (see src/lib/workload.ts).
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 bg-brand-navy text-white">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-brand-navy text-white">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-8 px-4 sm:px-6">
         <Link
           href="/"
@@ -37,6 +38,7 @@ export function SiteHeader() {
               <span className="sr-only sm:not-sr-only">New request</span>
             </Link>
           </Button>
+          <ThemeMenu />
           <MobileNav className="md:hidden" />
         </div>
       </div>

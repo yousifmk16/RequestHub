@@ -17,13 +17,19 @@ const SHOTS = [
   { name: "new-request-desktop", path: "/requests/new", viewport: { width: 1280, height: 1000 }, ready: "New request" },
   { name: "dashboard-mobile", path: "/", viewport: { width: 375, height: 812 }, ready: "Every request" },
   { name: "requests-mobile", path: "/requests", viewport: { width: 375, height: 812 }, ready: "Requests" },
+  { name: "dashboard-dark", path: "/", viewport: { width: 1280, height: 1180 }, ready: "At a glance", colorScheme: "dark" },
 ];
 
 mkdirSync(OUT_DIR, { recursive: true });
 const browser = await chromium.launch();
 
 for (const shot of SHOTS) {
-  const page = await browser.newPage({ viewport: shot.viewport, deviceScaleFactor: 2, reducedMotion: "reduce" });
+  const page = await browser.newPage({
+    viewport: shot.viewport,
+    deviceScaleFactor: 2,
+    reducedMotion: "reduce",
+    colorScheme: shot.colorScheme ?? "light", // the app follows the device theme
+  });
   await page.goto(BASE_URL + shot.path, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: shot.ready }).first().waitFor();
   await page.screenshot({ path: `${OUT_DIR}/${shot.name}.png` });

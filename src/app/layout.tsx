@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Almarai } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -22,21 +23,24 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${almarai.variable} h-full antialiased`}>
+    // suppressHydrationWarning: next-themes sets the theme class on <html> before
+    // React hydrates, so the server and client class lists differ by design.
+    <html lang="en" className={`${almarai.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="flex min-h-full flex-col">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-card focus:px-4 focus:py-2 focus:shadow-md focus:outline-2 focus:outline-ring"
-        >
-          Skip to content
-        </a>
-        <SiteHeader />
-        {/* tabIndex -1 lets the skip link move keyboard focus here, not just scroll. */}
-        <main id="main-content" tabIndex={-1} className="flex flex-1 flex-col outline-none">
-          {children}
-        </main>
-        {/* Pinned to light until dark mode exists, so toasts never render dark on a light page. */}
-        <Toaster theme="light" position="bottom-right" richColors closeButton />
+        <ThemeProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-card focus:px-4 focus:py-2 focus:shadow-md focus:outline-2 focus:outline-ring"
+          >
+            Skip to content
+          </a>
+          <SiteHeader />
+          {/* tabIndex -1 lets the skip link move keyboard focus here, not just scroll. */}
+          <main id="main-content" tabIndex={-1} className="flex flex-1 flex-col outline-none">
+            {children}
+          </main>
+          <Toaster position="bottom-right" richColors closeButton />
+        </ThemeProvider>
       </body>
     </html>
   );

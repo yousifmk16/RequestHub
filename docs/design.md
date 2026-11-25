@@ -134,3 +134,24 @@ pill), and coral (HR) differs from High priority both in hue and in form
   distinctive mark.
 - Rejected uppercase section labels and a mono face for metadata. Dates and
   counts use tabular figures in the same family.
+
+## Dark theme
+- **Default is the device setting.** A header menu offers Light, Dark and
+  Device setting, and the choice is remembered. `next-themes` sets the class
+  before the first paint, so there's no flash of the wrong theme.
+- The navy header and hero stay navy, the brand band in both themes, with a
+  hairline border so the header separates from the darker page.
+- Every token has a dark value chosen by computed contrast (table in
+  testing.md):
+  - page `#0D1322`, cards `#151D30`
+  - text `#E7EBF3`, muted text `#A3AEC4`
+  - status tints re-mixed for dark
+  - slate lightened (`#8894AB`) so the IT tab and medium-priority bars stay
+    visible
+- **Red is split by role.** Red *surfaces* behind white text use
+  `--brand-red-strong` (`#C72C21`) in both themes. Red *text* (links, errors,
+  high priority) uses `--accent-text` / `--destructive` / `--priority-high`,
+  which lighten to `#FF7A70` in dark, because `#C72C21` text on a dark card is
+  only 2.8:1.
+- **"Selected" is its own token** (`--selected`): navy in light, near-white in
+  dark. It's used for the active chip, checked form cards and the stat icon.

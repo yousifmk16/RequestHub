@@ -6,7 +6,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -70,7 +69,7 @@ export function DeleteRequestButton({
           </Button>
         ) : (
           // Solid red with white text: 5.5:1, where the tinted variant failed 4.5:1.
-          <Button size="lg" className="h-10 bg-destructive px-4 text-white hover:bg-destructive/90">
+          <Button size="lg" className="h-10 bg-brand-red-strong px-4 text-white hover:bg-brand-red-strong/90">
             <Trash2 /> Delete request
           </Button>
         )}
@@ -85,14 +84,18 @@ export function DeleteRequestButton({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isDeleting}>Keep request</AlertDialogCancel>
-          <AlertDialogAction
+          {/* A plain Button, not AlertDialogAction: that wraps Radix's Slot, which
+              concatenates classes instead of merging them, so the variant's
+              bg-primary competed with the red (light in dark mode: failed
+              contrast). Closing is handled by `open` state anyway. */}
+          <Button
             onClick={deleteRequest}
-            className="bg-destructive text-white hover:bg-destructive/90"
+            className="bg-brand-red-strong text-white hover:bg-brand-red-strong/90"
             disabled={isDeleting}
             aria-busy={isDeleting}
           >
             {isDeleting ? "Deleting…" : "Delete request"}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
