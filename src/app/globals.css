@@ -49,6 +49,9 @@
 
   --color-priority-high: var(--priority-high);
 
+  --color-brand-red: var(--brand-red);
+  --color-brand-red-strong: var(--brand-red-strong);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -58,49 +61,61 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+ * Palette: Lakeora brand tokens (lakeora.ai), mapped to semantic roles.
+ * Where white text sits on red, the brand's darker red (#C72C21, 5.5:1) is
+ * used instead of #E8372A (4.19:1) to meet WCAG AA. See docs/design.md.
+ */
 :root {
   --radius: 0.625rem;
 
-  /* Ink on paper, on a cool desk grey. */
-  --background: #f3f4f6; /* Desk */
-  --foreground: #1b2b44; /* Ink */
-  --card: #ffffff; /* Paper */
-  --card-foreground: #1b2b44;
+  /* Brand */
+  --brand-navy: #1f2a44; /* --lakeora-navy */
+  --brand-red: #e8372a; /* --lakeora-red: marks and accents, never behind text */
+  --brand-red-strong: #c72c21; /* --link-hover: red surfaces behind white text */
+  --brand-slate: #3e4c68; /* --lakeora-slate */
+
+  --background: #f5f8fc; /* --slate-10 */
+  --foreground: #1f2a44;
+  --card: #ffffff;
+  --card-foreground: #1f2a44;
   --popover: #ffffff;
-  --popover-foreground: #1b2b44;
-  --primary: #1b2b44;
+  --popover-foreground: #1f2a44;
+  --primary: #1f2a44;
   --primary-foreground: #ffffff;
-  --secondary: #e9ecf1;
-  --secondary-foreground: #1b2b44;
-  --muted: #eef0f3;
-  --muted-foreground: #5b6575; /* Graphite: 5.9:1 on paper */
-  --accent: #e9ecf1;
-  --accent-foreground: #1b2b44;
-  --destructive: #c2410c; /* Alert */
-  --border: #dde1e7; /* Rule */
-  --input: #8d97a6; /* 3:1 against paper so inputs read as inputs (WCAG 1.4.11) */
-  --ring: #2563c9;
+  --secondary: #eaf0f8; /* --slate-20 */
+  --secondary-foreground: #1f2a44;
+  --muted: #eaf0f8;
+  --muted-foreground: #5b6882; /* --slate-80: 5.6:1 on white */
+  --accent: #eaf0f8;
+  --accent-foreground: #1f2a44;
+  --destructive: #c72c21;
+  --border: #d2d4da; /* --navy-20 */
+  --input: #797f8f; /* --navy-60: 4:1 on white, so inputs read as inputs (WCAG 1.4.11) */
+  --ring: #3e4c68;
 
-  --category-it: #2563c9;
-  --category-hr: #9a3e8c;
-  --category-administration: #1f8a6a;
-  --category-other: #7c8594;
+  /* Department routing tabs (and chart colours). */
+  --category-it: #3e4c68; /* --lakeora-slate */
+  --category-hr: #ed6e6b; /* --lakeora-coral */
+  --category-administration: #fcbc2b; /* --color-warning (gold) */
+  --category-other: #a5aab4; /* --navy-40 */
 
-  --status-new: #1b2b44;
-  --status-new-tint: #e6ebf3;
-  --status-in-progress: #92400e;
-  --status-in-progress-tint: #fdefcf;
-  --status-completed: #166534;
-  --status-completed-tint: #dcf2e3;
+  /* Status pills: tint + strong text, always with an icon and a word. */
+  --status-new: #1f2a44;
+  --status-new-tint: #e9eaec; /* --navy-10 */
+  --status-in-progress: #7a5200;
+  --status-in-progress-tint: #fff3d4;
+  --status-completed: #17713f;
+  --status-completed-tint: #e3f4ea;
 
-  --priority-high: #c2410c;
+  --priority-high: #c72c21;
 
   /* Charts use the department colours so a colour means one thing everywhere. */
   --chart-1: var(--category-it);
   --chart-2: var(--category-hr);
   --chart-3: var(--category-administration);
   --chart-4: var(--category-other);
-  --chart-5: #1b2b44;
+  --chart-5: var(--brand-navy);
 }
 
 @layer base {
