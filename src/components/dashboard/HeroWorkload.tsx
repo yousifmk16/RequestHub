@@ -1,12 +1,10 @@
-import { connection } from "next/server";
 import { WorkloadBars } from "@/components/brand/WorkloadBars";
-import { getRequestStats } from "@/lib/services/requests";
+import { loadRequestStats } from "@/lib/data/request-stats";
 import { describeWorkload, litBarCount } from "@/lib/workload";
 
 /** The logo's workload meter at hero size, with its meaning spelled out. */
 export async function HeroWorkload() {
-  await connection(); // read at request time, not at build (see D4)
-  const stats = await getRequestStats();
+  const stats = await loadRequestStats();
   const workload = { total: stats.total, completed: stats.byStatus.COMPLETED };
 
   return (

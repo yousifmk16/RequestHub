@@ -1,5 +1,5 @@
 import { connection } from "next/server";
-import { getRequestStats } from "@/lib/services/requests";
+import { loadRequestStats } from "@/lib/data/request-stats";
 import type { Workload } from "@/lib/workload";
 import { WorkloadMark } from "./WorkloadMark";
 
@@ -20,7 +20,7 @@ export async function LiveWorkloadMark() {
 // falls back to the plain full-colour mark (workload undefined).
 async function loadWorkload(): Promise<Workload | undefined> {
   try {
-    const stats = await getRequestStats();
+    const stats = await loadRequestStats();
     return { total: stats.total, completed: stats.byStatus.COMPLETED };
   } catch (error) {
     console.error("Could not load workload for the logo", error);
