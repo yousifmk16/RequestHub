@@ -62,8 +62,10 @@ Each item is done only when its acceptance check passes.
 - ✅ Reflects current data (updates after create/edit/delete).
 
 ### R8 — Data persistence
-- ✅ All data stored in PostgreSQL; survives refresh, closing the browser, and
-  opening on another device.
+- ✅ All data stored in a database (SQLite locally, Turso in production);
+  survives refresh, closing the browser, and opening on another device.
+- ✅ A fresh clone runs with `npm install && npm run dev` — no database server,
+  Docker or `.env` needed.
 
 ## Non-functional requirements
 - **UI:** clean, modern, consistent; clear feedback on every action.

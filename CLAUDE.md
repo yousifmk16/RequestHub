@@ -10,7 +10,8 @@ Requirements live in `docs/requirements.md`. The build plan lives in `docs/plan.
 ## Stack
 - Next.js 16 (App Router) + TypeScript (strict)
 - Tailwind CSS + shadcn/ui (add components via the shadcn MCP)
-- Prisma ORM + PostgreSQL (Neon)
+- Prisma ORM + SQLite via `@prisma/adapter-libsql`
+  (local file `dev.db`, auto-created + seeded; Turso in production — see docs/decisions.md D1)
 - Zod (validation) + React Hook Form
 - Recharts (dashboard charts), Sonner (toasts)
 - Vitest (unit tests), Playwright (e2e tests)
