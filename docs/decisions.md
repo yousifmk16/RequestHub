@@ -56,11 +56,23 @@ Feeds the README section "Development approach".
   `use cache` plus invalidation after every mutation · C) keep it, cache no
   request data, and read the database at request time.
 - **Choice:** C.
-- **Why:** Database reads opt out of prerendering automatically (both API
-  routes build as dynamic `ƒ`), so data is always fresh with no invalidation
-  logic to get wrong. The static shell (layout, nav) is still prerendered, so
-  pages load fast. B would add cache tags and `revalidateTag` calls on every
-  write for no real benefit at this data size.
+- **Why:** Data is always fresh with no invalidation logic to get wrong. The
+  static shell (layout, nav) is still prerendered, so pages load fast. B would
+  add cache tags and `revalidateTag` calls on every write for no real benefit
+  at this data size.
+- **Correction (found while building the live logo):** the original reasoning
+  said database reads opt out of prerendering automatically. That holds for
+  the API routes (they read `request.url` or `params`), but **not for pages**.
+  Local SQLite answers within the prerender window, so a production build
+  baked the counts into static HTML, cached for a year. A production check
+  caught it: completing a request changed the API data but not the page.
+  - **Rule:** every server component that reads the database calls
+    `await connection()` (from `next/server`) before the query. The bundled
+    Next docs recommend exactly this for fast/synchronous SQLite drivers.
+  - **Result:** pages build as `◐` (partial prerender, static shell plus
+    streamed data) and respond with `Cache-Control: no-store`.
+  - **Caveat:** `connection()` must sit outside any `try/catch`, because it
+    signals Next by throwing during prerendering.
 - **Consequence:** Pages that read data must render it inside `<Suspense>` or
   a `loading.tsx` boundary, which the UI needs for loading states anyway.
 
@@ -120,6 +132,27 @@ Feeds the README section "Development approach".
 - **Motion:** The hero's rising bars grow once on load. It is the app's only
   non-interactive animation, it reinforces the logo, and it is disabled under
   `prefers-reduced-motion`.
+
+### D9 — The logo is a live workload meter
+- **Context:** The product owner wanted the logo to be interactive: all grey
+  when many requests are open, full colour when none are, with four bars in
+  the style of Lakeora's mark and palette, and a navy header.
+- **Rule:** lit bars = `floor(completed / total × 4)`. No requests counts as
+  everything done (all lit). Bars light from the bottom (longest, red) up.
+  The product owner chose a share-based rule over fixed counts, so it reads
+  the same with 10 or 10,000 requests. The rule is a pure function in
+  `src/lib/workload.ts` with unit tests.
+- **Shape:** four pills lengthening top to bottom with white end dots, in
+  Lakeora's red ramp (`--lakeora-pink`, `--red-60`, `--lakeora-coral`,
+  `--lakeora-red`). Lakeora's mark has three bars; four keeps ours its own.
+- **How it stays live:** the header logo is an async server component reading
+  `getRequestStats()`. Every mutation in the UI calls `router.refresh()`,
+  which re-renders the layout, so the bars update right after a status change.
+- **Resilience:** the logo sits in `<Suspense>` with the full-colour mark as
+  fallback, and a failed read also falls back to it, so it can never break the
+  header. Its meaning is in the tooltip and accessible name ("14 of 30
+  requests completed, 16 open"). The dashboard hero shows the same meter
+  large, with that sentence as a caption.
 
 ## Template
 

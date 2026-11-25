@@ -1,12 +1,17 @@
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { RoutingBars } from "@/components/layout/RoutingMark";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
+import { HeroWorkload, HeroWorkloadPlaceholder } from "./HeroWorkload";
 
 // Full-width navy band that opens the dashboard, echoing the lakeora.ai hero.
 export function DashboardHero() {
   return (
-    <section aria-labelledby="dashboard-title" className="bg-brand-navy text-white">
+    <section
+      aria-labelledby="dashboard-title"
+      // The header is navy too; a hairline keeps the two bands distinct.
+      className="border-t border-white/10 bg-brand-navy text-white"
+    >
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-[minmax(0,1fr)_auto]">
         <div className="max-w-xl">
           <h1 id="dashboard-title" className="text-[2.1rem] leading-[1.1] font-extrabold sm:text-5xl">
@@ -35,7 +40,11 @@ export function DashboardHero() {
             </Button>
           </div>
         </div>
-        <RoutingBars animated className="hidden size-60 md:block lg:size-72" />
+        <div className="hidden md:block">
+          <Suspense fallback={<HeroWorkloadPlaceholder />}>
+            <HeroWorkload />
+          </Suspense>
+        </div>
       </div>
     </section>
   );

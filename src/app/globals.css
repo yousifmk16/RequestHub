@@ -119,11 +119,15 @@
 
   --priority-high: #c72c21;
 
-  /* Logo bars sit on navy, so the slate and grey bars use lighter steps. */
-  --mark-it: #8894ab; /* --slate-60 */
-  --mark-hr: var(--category-hr);
-  --mark-administration: var(--category-administration);
-  --mark-other: #d2d4da; /* --navy-20 */
+  /* Logo / workload bars, top to bottom: Lakeora's red ramp. Unlit bars are a
+     grey that still reads on navy, so the shape stays visible at 0 lit. */
+  --mark-bar-1: #f4a2a2; /* --lakeora-pink */
+  --mark-bar-2: #f1877f; /* --red-60 */
+  --mark-bar-3: #ed6e6b; /* --lakeora-coral */
+  --mark-bar-4: #e8372a; /* --lakeora-red */
+  --mark-unlit: #5b6882; /* --slate-80 */
+  --mark-dot: #ffffff;
+  --mark-dot-unlit: #8894ab; /* --slate-60 */
 
   /* Secondary text on navy bands: 8:1 contrast. */
   --on-navy-muted: #bcc6d8; /* --slate-40 */
@@ -166,15 +170,16 @@
   }
 }
 
-/* The one orchestrated motion: the hero's bars rise once when the dashboard
-   opens. Reduced-motion users get the final state immediately (rule above). */
-@keyframes routing-bar-grow {
+/* The one orchestrated motion: the hero's bars draw in from the left once when
+   the dashboard opens. Reduced-motion users get the final state immediately
+   (rule above). */
+@keyframes mark-bar-grow {
   from {
-    transform: scaleY(0);
+    transform: scaleX(0);
   }
 }
-.routing-bar-grow {
+.mark-bar-grow {
   transform-box: fill-box;
-  transform-origin: bottom;
-  animation: routing-bar-grow 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: left;
+  animation: mark-bar-grow 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
