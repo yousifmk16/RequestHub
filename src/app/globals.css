@@ -6,8 +6,14 @@
 
 /* Design tokens: see docs/design.md for the reasoning behind each value. */
 @theme inline {
-  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Almarai: Lakeora's typeface, with Latin and Arabic in one family. */
+  --font-sans: var(--font-almarai), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-almarai), ui-sans-serif, system-ui, sans-serif;
+
+  /* Almarai ships 300/400/700/800 only. Map the 500/600 names (used across the
+     shadcn components) to its real 700, so the browser never picks a weight. */
+  --font-weight-medium: 700;
+  --font-weight-semibold: 700;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -131,7 +137,7 @@
   h1,
   h2,
   h3 {
-    @apply font-heading font-semibold tracking-tight text-balance;
+    @apply font-heading font-bold text-balance;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {

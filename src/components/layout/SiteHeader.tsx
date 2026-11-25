@@ -11,7 +11,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-6 px-4 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2.5 rounded-md text-[15px] font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-foreground"
+          className="flex items-center gap-2.5 rounded-md text-[15px] font-extrabold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-foreground"
         >
           <span className="grid size-7 place-items-center rounded-md bg-primary-foreground">
             <RoutingMark className="size-4" />

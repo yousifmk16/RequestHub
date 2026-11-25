@@ -65,11 +65,17 @@ pill), and coral (HR) differs from High priority both in hue and in form
 (tab vs bars).
 
 ## Type
-- **Public Sans** (one family). It was designed for public-service interfaces:
-  plain, very legible, neutral without being Inter/Geist.
-- Scale (1.25 ratio): 12 / 14 (UI text) / 16 (body) / 20 / 25 / 31.
-- Headings are 600 weight with slightly tight tracking. Numbers in tables and
-  stats use tabular figures so columns line up.
+- **Almarai** (one family): Lakeora's own typeface, so the app reads as part of
+  the same brand. It covers Latin and Arabic, so the planned Arabic/RTL mode
+  stays in one family instead of falling back to a system Arabic font.
+- Weights: Almarai ships 300/400/700/800 only. Body is 400. `font-medium` and
+  `font-semibold` (500/600, used by shadcn components) are mapped to 700 in
+  the theme, so the browser never picks a weight on its own. Page titles and
+  the wordmark use 800, as Lakeora's headlines do.
+- Only the Latin files are preloaded. The Arabic faces are declared with a
+  `unicode-range` and download only when Arabic text appears.
+- Scale (1.25 ratio): 12 / 14 (UI text) / 16 (body) / 20 / 25 / 31. Numbers in
+  tables and stats use tabular figures so columns line up.
 - Sentence case everywhere. No all-caps labels, no eyebrows.
 
 ## Layout
