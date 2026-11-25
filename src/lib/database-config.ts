@@ -15,8 +15,20 @@ export type DatabaseConfig = {
 };
 
 export function getDatabaseConfig(): DatabaseConfig {
+  const url = process.env.DATABASE_URL;
+
+  // On Vercel the local-file fallback can't work (read-only disk, no
+  // migrations), so a missing variable fails loudly with the fix, instead of
+  // as a confusing "unable to open database file" at the first request.
+  if (!url && process.env.VERCEL) {
+    throw new Error(
+      "DATABASE_URL is not set. Add the Turso URL and DATABASE_AUTH_TOKEN in Vercel → " +
+        "Project Settings → Environment Variables (see docs/deployment.md).",
+    );
+  }
+
   return {
-    url: process.env.DATABASE_URL || DEFAULT_DATABASE_URL,
+    url: url || DEFAULT_DATABASE_URL,
     authToken: process.env.DATABASE_AUTH_TOKEN || undefined,
   };
 }
