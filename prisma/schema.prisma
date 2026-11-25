@@ -1,0 +1,11 @@
+// Request Hub data model. See docs/requirements.md for the field rules.
+// Connection URL lives in prisma7.config.ts (Prisma 7 no longer reads it here).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
