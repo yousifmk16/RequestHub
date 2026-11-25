@@ -50,7 +50,7 @@ Screenshots are taken from the live site by `node scripts/capture-screenshots.mj
 | **Persistence** | Data lives in a database: SQLite locally, Turso (hosted SQLite) in production. It survives refreshes, restarts and other devices. |
 
 **Details beyond the brief:**
-- **The logo is a live workload meter.** Its four bars light up as requests are completed ("14 of 30 completed, 16 open") and update the moment a status changes.
+- **The logo is a live workload meter** (see [below](#the-live-logo)). Its four bars light up as requests are completed and update the moment a status changes.
 - **Zero-setup clone.** No database server, Docker or `.env` is needed to run it.
 - **Accessibility tested.** WCAG 2.1 AA scans of every page, keyboard-only tests, and a 320px reflow test.
 - **Design.** Lakeora's palette and typeface (Almarai), checked for contrast.
@@ -61,6 +61,32 @@ Screenshots are taken from the live site by `node scripts/capture-screenshots.mj
   sorted view. The file opens correctly in Excel (UTF-8 with BOM), and cells
   that a spreadsheet would run as formulas are neutralised
   ([D17](docs/decisions.md)).
+
+### The live logo
+
+The Request Hub mark in the header is also a progress meter for the whole
+service desk. Its four bars light up from the bottom (the longest, red bar
+first) as the share of completed requests grows:
+
+**lit bars = ⌊ completed ÷ total × 4 ⌋**
+
+![The logo meter at 0, 1, 2, 3 and 4 lit bars: 0, 8, 15, 23 and 30 of 30 requests completed](docs/screenshots/logo-states.png)
+
+- **Share, not counts:** it reads the same with 10 requests or 10,000. With
+  no requests at all, every bar is lit (nothing is waiting).
+- **Live:** completing or reopening a request from the list, the detail page
+  or the form re-renders the header, so the bars change straight away, with
+  no reload. They fade between states over half a second.
+- **Readable without the picture:** hovering shows "14 of 30 requests
+  completed, 16 open", and screen readers hear the same sentence. The
+  dashboard shows the meter large with that sentence as a caption.
+- **Safe:** if the counts can't be loaded, the header shows the plain
+  full-colour mark instead of breaking.
+
+The rule is a tested pure function (`src/lib/workload.ts`); the design is
+explained in [D9](docs/decisions.md). The image above was captured from a
+local copy with the demo data set to each level, so the live site's data
+wasn't changed.
 
 ---
 
@@ -174,7 +200,7 @@ chart library, and why a missing request's page returns HTTP 200.
 **Version control.** Each phase was built on its own branch and merged into
 `main` with `--no-ff`, so the history reads phase by phase. Commits are small
 Conventional Commits (`feat`, `fix`, `test`, `docs`, …), each with a message
-explaining *why*. 137 commits in total.
+explaining *why*. 139 commits in total.
 
 **Testing.** Unit tests for rules and helpers. Integration tests run the service
 and route handlers against a real SQLite file. End-to-end tests cover every
