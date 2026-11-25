@@ -89,8 +89,20 @@ Feeds the README section "Development approach".
     destructive colour, so making every button red would blur "main action"
     with "delete". Only the header's New request button uses red, as on
     lakeora.ai.
-  - Layout, type (Public Sans) and the routing-tab concept are unchanged; only
-    the palette moved.
+  - Layout and the routing-tab concept are unchanged.
+
+### D7 — Typeface: Almarai
+- **Context:** With the Lakeora palette in place, the product owner chose to
+  match Lakeora's typeface as well (it replaces Public Sans).
+- **Why it fits:** It is the brand's font, and it covers Arabic, which the
+  planned Arabic/RTL extra needs.
+- **Trade-offs:**
+  - Almarai has no 500/600 weights. Rather than editing the generated shadcn
+    components, the theme maps `--font-weight-medium` and
+    `--font-weight-semibold` to 700: one token instead of browser
+    guesswork (500 would silently render as 400).
+  - Only the Latin subset is preloaded, so English pages don't pay for the
+    Arabic font files.
 
 ## Template
 
