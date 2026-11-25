@@ -221,6 +221,33 @@ Feeds the README section "Development approach".
   second data path for a status code no user sees, so it wasn't added. R3
   ("shows a 404 page") is met, and the API returns real 404s.
 
+### D12 — Dashboard charts as HTML bars, not Recharts
+- **Context:** R7 asks for breakdowns by department and by priority. The
+  original stack listed Recharts, installed through the shadcn `chart`
+  component.
+- **Options:** A) Recharts (SVG, client-side) · B) server-rendered HTML/CSS bars.
+- **Choice:** B. Recharts was installed, then removed before any chart was
+  written.
+- **Why:** Both charts are "category → count" lists. As HTML rows, each bar is
+  a real link to the filtered list, so keyboard and screen-reader access comes
+  free: the accessible name is "HR: 8 requests, 27% of all. Show these
+  requests". They render on the server, so there's no client bundle, no
+  hydration and no resize measuring at 375px. Recharts would need a hidden
+  data table for accessibility and custom click handling, for two bar lists.
+- **Details:** Bar width is relative to the largest row so differences stay
+  readable, and the printed percentage is the share of all requests.
+  Department bars use the routing-tab colours; priority uses grey / slate /
+  alert red.
+- **Revisit when:** charts need axes, time series or interaction (trends over
+  time, stacked status per department). Then a chart library earns its keep.
+
+### D13 — One stats query per page view
+- **Context:** The header logo, the dashboard hero and the dashboard sections
+  all need the same counts.
+- **Choice:** `loadRequestStats()` wraps `getRequestStats()` in React `cache()`
+  together with `connection()`. The query runs once per request whichever
+  components ask, and the "read at request time" rule (D4) lives in one place.
+
 ## Template
 
 ### D1 — <decision title>
