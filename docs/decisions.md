@@ -285,6 +285,31 @@ Feeds the README section "Development approach".
   class is set before React hydrates. The header icon (sun or moon) is chosen
   by CSS, so nothing else differs between the server and the client.
 
+### D16 — Request detail page as its own route
+- **Context:** The list shows a two-line preview. Reading a full description
+  meant opening the edit form, which is the wrong tool for reading and
+  carries an unsaved-changes guard.
+- **Options:** A) expand the row in place · B) a dialog or side sheet over
+  the list · C) a route, `/requests/[id]`.
+- **Choice:** C.
+- **Why:** A URL can be shared and bookmarked, and the back button works.
+  The page is a server component with no client state. A missing id reuses
+  the request not-found page (moved up from `edit/` to `[id]/`, where it now
+  covers both routes). A and B would add client state to the list and, in
+  A's case, a second rendering of each row's content (see D10).
+- **What stays editable:** only status, through the same `StatusSelect` as
+  the list, because it is the field people change most. Everything else goes
+  through Edit.
+- **Trade-offs:**
+  - Saving the edit form still returns to the list, not to the detail page.
+    The form doesn't know where it was opened from; passing that through
+    wasn't worth it for this scope.
+  - The exact date under each relative time is formatted on the server, so
+    in production it shows the server's time zone (UTC). The relative time
+    above it is correct everywhere. The list's hover tooltips already work
+    this way.
+  - A missing id still returns HTTP 200 with the 404 screen (D11).
+
 ## Template
 
 ### D1 — <decision title>
