@@ -68,10 +68,6 @@ export function RequestForm(props: RequestFormProps) {
     router.refresh(); // also refresh the layout, so the header's workload logo updates
   }
 
-  function confirmDiscard(event: React.MouseEvent) {
-    if (isDirty && !window.confirm("Discard your changes?")) event.preventDefault();
-  }
-
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-7 rounded-xl border bg-card p-5 sm:p-7">
       <div>
@@ -134,7 +130,7 @@ export function RequestForm(props: RequestFormProps) {
 
       <div className="flex flex-col-reverse gap-2 border-t pt-6 sm:flex-row sm:justify-end">
         <Button asChild variant="outline" size="lg" className="h-10 px-5">
-          <Link href="/requests" onClick={confirmDiscard}>Cancel</Link>
+          <Link href="/requests">Cancel</Link>
         </Button>
         <Button type="submit" size="lg" disabled={isSubmitting} className="h-10 px-5">
           {isSubmitting && <LoaderCircle className="animate-spin" />}
