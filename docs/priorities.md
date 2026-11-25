@@ -19,7 +19,7 @@ HOW every task is done, not to a phase.
   status update, search, filters (category, status, priority), dashboard,
   data saved after refresh.
 - Filters and search combine correctly and survive a page refresh (URL params).
-- Nothing is "done" until it is tested in the browser (Playwright MCP).
+- Nothing is "done" until it is tested in a real browser.
 - Handle edge cases: empty list, no search results, missing request (404),
   very long titles/descriptions, database errors.
 
@@ -34,10 +34,15 @@ HOW every task is done, not to a phase.
 - Status and priority shown as colored badges, readable at a glance.
 
 ## 3. Effective use of AI-powered development tools
-- Use context7 for any library API (Next.js, Prisma, Tailwind, shadcn).
-- Use the shadcn MCP to add components, not hand-written copies.
-- Use next-devtools MCP to check for runtime/build errors.
-- Use Playwright MCP to verify flows; webapp-testing skill for repeatable tests.
+- Check current library docs before relying on an API (Next.js, Prisma,
+  Tailwind, shadcn): context7, the docs bundled in `node_modules`, or the
+  installed type definitions.
+- Add shadcn components through the generator (shadcn MCP or CLI), not
+  hand-written copies.
+- Check for runtime and build errors (next-devtools MCP, or the dev overlay and
+  server log).
+- Verify flows in a real browser (Playwright MCP or the built-in browser), and
+  turn them into repeatable Playwright tests.
 - Log notable moments in docs/ai-log.md: what was asked, what the AI got wrong,
   how it was caught and fixed. This feeds the README.
 
