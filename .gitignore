@@ -55,3 +55,5 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+# Playwright MCP writes page snapshots and console logs here
+/.playwright-mcp/
