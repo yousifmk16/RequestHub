@@ -3,7 +3,7 @@
 ## How to run
 
 ```bash
-npm test            # 101 unit + integration tests (Vitest, real SQLite test file)
+npm test            # 116 unit + integration tests (Vitest, real SQLite test file)
 npm run test:e2e    # end-to-end tests (Playwright), desktop and 375px, on a production build
 npm run lint && npm run typecheck
 ```
@@ -21,9 +21,9 @@ request.
 |---|---|---|
 | **R1** Create, validation, server rejects bad input | `validation.test.ts`, `api-routes.test.ts` (400 on bypass, malformed JSON) | `request-form.spec.ts` (empty submit: errors under each field, focus, nothing saved; create succeeds; in-app links ask before discarding changes), `keyboard.spec.ts` (keyboard-only create) |
 | **R2** List, newest first, empty state, mobile | `requests-service.test.ts` (ordering) | `requests-empty.spec.ts`, every spec also runs at 375px, `reflow.spec.ts` (320px) |
-| **R3** Edit, same validation, missing → 404 page | `api-routes.test.ts` (PATCH rules, 404) | `request-form.spec.ts` (edit flow, not-found page) |
-| **R4** Delete with confirmation | `api-routes.test.ts` (204, then 404) | `requests-list.spec.ts` (cancel keeps it, confirm removes it, API 404 afterwards) |
-| **R5** Status from the list, persists | `api-routes.test.ts` (status-only PATCH) | `requests-list.spec.ts` (change, toast, reload), `keyboard.spec.ts` |
+| **R3** Edit, same validation, missing → 404 page | `api-routes.test.ts` (PATCH rules, 404) | `request-form.spec.ts` (list → detail → edit flow, not-found page), `request-detail.spec.ts` (every field shown, missing id) |
+| **R4** Delete with confirmation | `api-routes.test.ts` (204, then 404) | `requests-list.spec.ts` (cancel keeps it, confirm removes it, API 404 afterwards), `request-detail.spec.ts` (delete from the detail page returns to the list) |
+| **R5** Status from the list, persists | `api-routes.test.ts` (status-only PATCH) | `requests-list.spec.ts` (change, toast, reload), `request-detail.spec.ts` (same from the detail page), `keyboard.spec.ts` |
 | **R6** Search + filters + sort combine, in URL, clear, no results | `requests-service.test.ts` (AND, literal `%`/`_`, priority sort), `validation.test.ts` (tolerant URL parsing) | `requests-list.spec.ts` (chips + department + sort + search, reload, clear), `requests-empty.spec.ts` (bad URL values) |
 | **R7** Dashboard totals and breakdowns, current | `requests-service.test.ts` (zero-filled stats), `workload.test.ts` | `dashboard.spec.ts` (totals match API, bar opens filtered list), `requests-list.spec.ts` (dashboard updates after a list change), `requests-empty.spec.ts` |
 | **R8** Persistence | Service tests run against a real SQLite file | Every reload assertion above; fresh-clone run documented in the README |
