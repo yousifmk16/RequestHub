@@ -35,6 +35,9 @@ const status = z.enum(Status, { error: "Choose a valid status" });
 // Status is not accepted on create: every new request starts as NEW.
 export const requestCreateSchema = z.object({ title, description, category, priority });
 
+// The edit form always sends the whole request, status included.
+export const requestEditSchema = requestCreateSchema.extend({ status });
+
 // Every field optional so the list can PATCH just the status, but an empty
 // update is rejected rather than silently doing nothing.
 export const requestUpdateSchema = z
@@ -64,6 +67,7 @@ export const requestQuerySchema = z.object({
 });
 
 export type RequestCreateInput = z.infer<typeof requestCreateSchema>;
+export type RequestEditInput = z.infer<typeof requestEditSchema>;
 export type RequestUpdateInput = z.infer<typeof requestUpdateSchema>;
 export type RequestQuery = z.infer<typeof requestQuerySchema>;
 

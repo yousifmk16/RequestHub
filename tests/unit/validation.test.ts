@@ -125,3 +125,12 @@ describe("parseRequestQuery", () => {
     expect(parseRequestQuery({ q: "x".repeat(101) })).toEqual({ sort: "newest" });
   });
 });
+
+describe("requestEditSchema", () => {
+  it("requires every field, including status", async () => {
+    const { requestEditSchema } = await import("@/lib/validation");
+    const result = requestEditSchema.safeParse({ ...validInput });
+    expect(fieldErrors(result)).toEqual({ status: ["Choose a valid status"] });
+    expect(requestEditSchema.parse({ ...validInput, status: "COMPLETED" }).status).toBe("COMPLETED");
+  });
+});
