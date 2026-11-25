@@ -30,3 +30,8 @@ export function formatRelativeTime(date: Date, now: Date = new Date()): string {
 export function formatDateTime(date: Date): string {
   return dateTimeFormatter.format(date);
 }
+
+/** Whole-number percentage of a total; 0 when the total is 0 (no divide-by-zero). */
+export function percentOf(part: number, total: number): number {
+  return total > 0 ? Math.round((part / total) * 100) : 0;
+}

@@ -15,7 +15,8 @@ Requirements live in `docs/requirements.md`. The build plan lives in `docs/plan.
 - Prisma ORM + SQLite via `@prisma/adapter-libsql`
   (local file `dev.db`, auto-created + seeded; Turso in production — see docs/decisions.md D1)
 - Zod (validation) + React Hook Form
-- Recharts (dashboard charts), Sonner (toasts)
+- Sonner (toasts). Dashboard charts are server-rendered HTML bars, no chart library
+  (see docs/decisions.md D12)
 - Vitest (unit tests), Playwright (e2e tests)
 - Deployed on Vercel
 
