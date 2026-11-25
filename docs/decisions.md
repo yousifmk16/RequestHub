@@ -252,9 +252,9 @@ Feeds the README section "Development approach".
 - **Context:** On the first deploy every database read failed, and the API's
   generic 500 message (by design) hid the cause. Vercel's runtime logs were
   hard to reach.
-- **Choice:**  runs one count query and reports
-   + the request count, or  with one of ,
-  , ,  and a fixed hint.
+- **Choice:** `GET /api/health` runs one count query and reports `ok` plus the
+  request count, or `503` with one of `schema-missing`, `auth-failed`,
+  `unreachable` or `unknown` and a fixed hint.
 - **Why public:** it never returns the URL, the token or the raw error (the
   real cause is logged server-side), so it is safe to expose, and it doubles as
   an uptime check.
