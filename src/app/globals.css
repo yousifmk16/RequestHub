@@ -57,6 +57,9 @@
 
   --color-brand-red: var(--brand-red);
   --color-brand-red-strong: var(--brand-red-strong);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-slate: var(--brand-slate);
+  --color-on-navy-muted: var(--on-navy-muted);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -116,6 +119,15 @@
 
   --priority-high: #c72c21;
 
+  /* Logo bars sit on navy, so the slate and grey bars use lighter steps. */
+  --mark-it: #8894ab; /* --slate-60 */
+  --mark-hr: var(--category-hr);
+  --mark-administration: var(--category-administration);
+  --mark-other: #d2d4da; /* --navy-20 */
+
+  /* Secondary text on navy bands: 8:1 contrast. */
+  --on-navy-muted: #bcc6d8; /* --slate-40 */
+
   /* Charts use the department colours so a colour means one thing everywhere. */
   --chart-1: var(--category-it);
   --chart-2: var(--category-hr);
@@ -152,4 +164,17 @@
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* The one orchestrated motion: the hero's bars rise once when the dashboard
+   opens. Reduced-motion users get the final state immediately (rule above). */
+@keyframes routing-bar-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+.routing-bar-grow {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: routing-bar-grow 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }

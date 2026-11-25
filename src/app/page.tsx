@@ -1,10 +1,5 @@
-import { PageHeader } from "@/components/layout/PageHeader";
+import { DashboardHero } from "@/components/dashboard/DashboardHero";
 
 export default function DashboardPage() {
-  return (
-    <PageHeader
-      title="Dashboard"
-      description="An overview of every request: how many are open, and where the work is."
-    />
-  );
+  return <DashboardHero />;
 }

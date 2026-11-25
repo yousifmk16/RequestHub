@@ -104,6 +104,23 @@ Feeds the README section "Development approach".
   - Only the Latin subset is preloaded, so English pages don't pay for the
     Arabic font files.
 
+### D8 — White header, dashboard hero, page-level containers
+- **Context:** The product owner asked for a white header like lakeora.ai, a
+  navy hero band on the dashboard, and a logo whose bars rise left to right.
+- **Choice:**
+  - The header is white and sticky, with navy links and a red active underline.
+  - The dashboard opens with a full-width navy band.
+  - The centred content column moved from the root layout into a
+    `PageContainer` used by each page.
+- **Why:** A full-width band can't live inside a centred, padded `<main>`. The
+  usual workaround (`w-screen` or negative margins) causes horizontal
+  scrolling on Windows, where `100vw` includes the scrollbar. Letting each page
+  choose its container is simpler and has no overflow (checked: no horizontal
+  scroll at 1280px or 375px).
+- **Motion:** The hero's rising bars grow once on load. It is the app's only
+  non-interactive animation, it reinforces the logo, and it is disabled under
+  `prefers-reduced-motion`.
+
 ## Template
 
 ### D1 — <decision title>
