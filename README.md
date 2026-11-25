@@ -53,6 +53,9 @@ Screenshots are taken from the live site by `node scripts/capture-screenshots.mj
 - **Zero-setup clone.** No database server, Docker or `.env` is needed to run it.
 - **Accessibility tested.** WCAG 2.1 AA scans of every page, keyboard-only tests, and a 320px reflow test.
 - **Design.** Lakeora's palette and typeface (Almarai), checked for contrast.
+- **Dark mode.** Follows the device by default, with a Light / Dark / Device
+  menu. Every colour was re-checked, and the accessibility scan runs in both
+  themes.
 
 ---
 
@@ -155,8 +158,8 @@ UI ──► API route ──► Zod validation ──► service ──► Pris
 See [architecture.md](docs/architecture.md) for the full map, including where
 to change what.
 
-**Decisions are written down.** [decisions.md](docs/decisions.md) has 14
-entries (D1–D14), each with the options considered and the trade-off. Examples:
+**Decisions are written down.** [decisions.md](docs/decisions.md) has 15
+entries (D1–D15), each with the options considered and the trade-off. Examples:
 SQLite instead of Postgres for zero-setup cloning, HTML bars instead of a
 chart library, and why a missing request's page returns HTTP 200.
 
@@ -210,8 +213,8 @@ WCAG scans, keyboard-only flows and 320px reflow. The R1–R8 coverage map is in
 2. Request history: comments, status timeline and an audit log.
 3. Pagination with SQL-side sorting and full-text search.
 4. Notifications when a request changes status.
-5. Planned extras: dark mode, CSV export of the current view, and an Arabic
-   interface with right-to-left layout (the Almarai font already covers Arabic).
+5. Planned extras: CSV export of the current view, and an Arabic interface
+   with right-to-left layout (the Almarai font already covers Arabic).
 6. Attachments (screenshots for IT requests).
 
 ---
@@ -223,7 +226,7 @@ WCAG scans, keyboard-only flows and 320px reflow. The R1–R8 coverage map is in
 | [docs/requirements.md](docs/requirements.md) | Data model and R1–R8 with acceptance checks |
 | [docs/plan.md](docs/plan.md) | The phased build plan |
 | [docs/architecture.md](docs/architecture.md) | Data flow, folder map, where to change what |
-| [docs/decisions.md](docs/decisions.md) | D1–D14: technical decisions with options and trade-offs |
+| [docs/decisions.md](docs/decisions.md) | D1–D15: technical decisions with options and trade-offs |
 | [docs/design.md](docs/design.md) | Visual direction, palette and type, with sources |
 | [docs/testing.md](docs/testing.md) | Test coverage per requirement and the accessibility audit |
 | [docs/ai-log.md](docs/ai-log.md) | Where AI output was wrong, how it was caught, and the fix |

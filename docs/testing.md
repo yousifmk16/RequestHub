@@ -61,6 +61,18 @@ from the browser's accessibility tree.
 
 All pass. Brand red `#E8372A` is only used where there's no text (see D6).
 
+**Dark theme** (computed before use; also covered by the dark-mode axe scans):
+
+| Element | Foreground | Background | Ratio | Required |
+|---|---|---|---|---|
+| Body text | `#E7EBF3` | page `#0D1322` / card `#151D30` | 15.51 / 14.06 | 4.5 |
+| Muted text | `#A3AEC4` | page / card / tint | 8.30 / 7.53 / 6.22 | 4.5 |
+| Error, red links, High priority | `#FF7A70` | card | 6.61 | 4.5 |
+| Status: New / In Progress / Completed | `#DCE3F0` / `#FFD27A` / `#7EDCA6` | their dark tints | 10.05 / 9.35 / 8.44 | 4.5 |
+| Primary button, selected chip | `#0D1322` | `#E7EBF3` | 15.51 | 4.5 |
+| Input border, focus ring (non-text) | `#6B7894` / `#8FA6D6` | card | 3.79 / 6.87 | 3 |
+| Department tabs (non-text) | IT `#8894AB`, HR, Admin, Other | card | 5.50 – 9.89 | 3 |
+
 ### Keyboard
 | Element | Behaviour |
 |---|---|
@@ -78,4 +90,4 @@ target size (2.5.8, 24px). The 44px figure (2.5.5) is AAA.
 - **No manual screen-reader session** (NVDA, VoiceOver) was done. Names, roles
   and states were checked through the browser's accessibility tree and axe,
   which catches most, but not all, screen-reader problems.
-- Dark mode and Arabic/RTL are not built yet, so they weren't audited.
+- Arabic/RTL is not built yet, so it wasn't audited.
