@@ -154,6 +154,33 @@ Feeds the README section "Development approach".
   requests completed, 16 open"). The dashboard hero shows the same meter
   large, with that sentence as a caption.
 
+### D10 — Requests list: one responsive list, URL-driven filters
+- **Layout:** One `<ul>` where each row is a CSS grid. It shows as columns from
+  `md` up and as stacked blocks below. The alternative, a `<table>` plus a
+  separate mobile card list, renders every request twice, so each status
+  control and delete button would exist twice (double the DOM, ambiguous for
+  tests and assistive tech). A visual column header row (`aria-hidden`) labels
+  the desktop columns, and every cell carries words (department, "High",
+  "In Progress"), so nothing relies on the header or on colour.
+- **Filters:** The URL is the only source of truth (`?q=&category=&status=&
+  priority=&sort=`), parsed by the tolerant `requestQuerySchema`, so links are
+  shareable and survive refresh.
+  - Selects use React 19 `useOptimistic`, so the choice shows instantly while
+    the server re-renders.
+  - Search is local state pushed after 300 ms. A "last pushed value" guard
+    stops a slow response from overwriting newer typing, while still adopting
+    outside changes (the empty state's Clear filters link, back/forward).
+  - While a new list loads, the filters mark themselves `data-pending` and the
+    list dims via `group-has-data-pending` (CSS only, no shared context).
+- **Inline status:** Local state that re-syncs when the server value changes,
+  not `useOptimistic`. An optimistic value would snap back between the PATCH
+  finishing and `router.refresh()` landing, causing a flicker. On failure it
+  rolls back with an error toast.
+- **Delete:** A controlled AlertDialog that stays open (button disabled) until
+  the server answers, so failures are visible. A 404 counts as success,
+  because someone else already deleted it. Initial focus is on
+  "Keep request", the safe choice.
+
 ## Template
 
 ### D1 — <decision title>
