@@ -52,7 +52,7 @@ export function StatusChips({ value, counts, onChange }: StatusChipsProps) {
               "inline-flex h-9 shrink-0 items-center gap-2 rounded-full border px-3.5 text-sm font-medium transition-colors",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
               active
-                ? "border-brand-navy bg-brand-navy text-white"
+                ? "border-selected bg-selected text-selected-foreground"
                 : "border-border bg-card text-foreground hover:border-brand-slate/40 hover:bg-secondary",
             )}
           >
@@ -63,7 +63,7 @@ export function StatusChips({ value, counts, onChange }: StatusChipsProps) {
             <span
               className={cn(
                 "min-w-6 rounded-full px-1.5 text-center text-xs tabular-nums",
-                active ? "bg-white/15 text-white" : "bg-secondary text-muted-foreground",
+                active ? "bg-selected-foreground/15 text-selected-foreground" : "bg-secondary text-muted-foreground",
               )}
             >
               {count}

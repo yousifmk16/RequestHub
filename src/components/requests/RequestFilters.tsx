@@ -125,7 +125,7 @@ export function RequestFilters({ query, statusCounts, resultCount }: RequestFilt
             {filtered ? `${resultCount} matching ${noun}` : `${resultCount} ${noun}`}
           </p>
           {filtered && (
-            <Button variant="link" size="sm" onClick={clearFilters} className="h-auto px-0 text-brand-red-strong">
+            <Button variant="link" size="sm" onClick={clearFilters} className="h-auto px-0 text-accent-text">
               <X /> Clear filters
             </Button>
           )}

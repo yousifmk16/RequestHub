@@ -26,7 +26,7 @@ export function StatCards({ stats }: { stats: RequestStats }) {
       context: stats.total === 0 ? "Nothing submitted yet" : `${open} still open`,
       href: buildRequestsHref({}),
       icon: Layers,
-      iconClass: "bg-brand-navy text-white",
+      iconClass: "bg-selected text-selected-foreground",
     },
     ...STATUSES.map((status) => ({
       label: STATUS_LABELS[status],

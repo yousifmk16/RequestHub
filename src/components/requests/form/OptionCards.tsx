@@ -37,7 +37,7 @@ export function OptionCards({ legend, options, registration, error, className }:
             key={option.value}
             className={cn(
               "group relative flex cursor-pointer items-start gap-3 rounded-lg border bg-card p-3 pe-9 transition-colors",
-              "hover:border-brand-slate/50 has-checked:border-brand-navy has-checked:bg-secondary has-checked:ring-1 has-checked:ring-brand-navy",
+              "hover:border-brand-slate/50 has-checked:border-selected has-checked:bg-secondary has-checked:ring-1 has-checked:ring-selected",
               "has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring",
               error && "border-destructive/60",
             )}
@@ -50,7 +50,7 @@ export function OptionCards({ legend, options, registration, error, className }:
             </span>
             <CircleCheck
               aria-hidden="true"
-              className="absolute top-3 end-3 size-4 text-brand-navy opacity-0 transition-opacity group-has-checked:opacity-100"
+              className="absolute top-3 end-3 size-4 text-selected opacity-0 transition-opacity group-has-checked:opacity-100"
             />
           </label>
         ))}

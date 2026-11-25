@@ -23,7 +23,7 @@ export async function RecentRequests() {
         {requests.length > 0 && (
           <Link
             href="/requests"
-            className="rounded-sm text-sm font-bold text-brand-red-strong hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="rounded-sm text-sm font-bold text-accent-text hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             View all
           </Link>
