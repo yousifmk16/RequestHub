@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 const RECENT_COUNT = 5;
 
-/** The newest requests, each linking to its edit page. */
+/** The newest requests, each linking to its detail page. */
 export async function RecentRequests() {
   await connection(); // request-time read (docs/decisions.md D4)
   const requests = await listRecentRequests(RECENT_COUNT);
@@ -48,7 +48,7 @@ export async function RecentRequests() {
               />
               <div className="min-w-0 flex-1">
                 <Link
-                  href={`/requests/${request.id}/edit`}
+                  href={`/requests/${request.id}`}
                   className="line-clamp-1 font-bold [overflow-wrap:anywhere] hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   {request.title}
