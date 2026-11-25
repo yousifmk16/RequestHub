@@ -1,2 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Normalize all text files to LF in the repo and working tree, so diffs stay
+# clean across Windows/macOS/Linux and match Prettier/ESLint expectations.
+* text=auto eol=lf
+*.png binary
+*.ico binary
+*.db binary

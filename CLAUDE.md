@@ -1,5 +1,7 @@
 # Request Hub — Project Instructions
 
+@AGENTS.md
+
 Employee Request Management System: employees submit, manage and track internal
 service requests. Built for a technical assessment — quality, reliability and
 explainability matter more than feature count.
