@@ -22,7 +22,7 @@ export default defineConfig({
     { name: "mobile", use: { ...devices["Pixel 7"], viewport: { width: 375, height: 812 } } },
   ],
   webServer: {
-    command: `node scripts/prepare-e2e-db.mjs && npx next dev --port ${PORT}`,
+    command: `node scripts/prepare-test-db.mjs prisma/e2e.db && npx next dev --port ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

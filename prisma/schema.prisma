@@ -9,3 +9,39 @@ generator client {
 datasource db {
   provider = "sqlite"
 }
+
+enum Category {
+  IT
+  HR
+  ADMINISTRATION
+  OTHER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Status {
+  NEW
+  IN_PROGRESS
+  COMPLETED
+}
+
+model Request {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    Category
+  priority    Priority
+  status      Status   @default(NEW)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // The list is always ordered by date and filtered by these columns.
+  @@index([createdAt])
+  @@index([status])
+  @@index([category])
+  @@index([priority])
+}
