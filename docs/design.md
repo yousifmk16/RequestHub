@@ -95,15 +95,20 @@ pill), and coral (HR) differs from High priority both in hue and in form
 │  └───────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
 ```
-- **Header:** white, as on lakeora.ai: navy wordmark and links, a red underline
-  on the active page, and the red pill for the main action. It stays visible
-  while scrolling.
-- **Logo mark:** four department bars rising left to right (a queue being
-  worked through) on a navy tile. The same shape is the favicon.
-- **Dashboard hero:** a full-width navy band with the headline, a short
-  description and two pill actions. The large rising bars on the right are
-  the app's one orchestrated motion: they grow once on load (skipped with
-  reduced motion) and are hidden on small screens.
+- **Header:** Lakeora navy with white wordmark and links, a red underline on the
+  active page, and the red pill for the main action. It stays visible while
+  scrolling.
+- **Logo mark = workload meter:** four pills lengthening top to bottom, each
+  with a white end dot, in Lakeora's red ramp (pink, light red, coral, red).
+  Bars light from the bottom as the share of completed requests grows: all
+  grey when nothing is done, full colour when nothing is open. The tooltip
+  says it in words ("14 of 30 requests completed, 16 open"). The favicon is
+  the full-colour mark. See decisions.md D9.
+- **Dashboard hero:** a full-width navy band (a hairline separates it from the
+  navy header) with the headline, a short description and two pill actions.
+  On the right is the same meter at large size with its sentence as a
+  caption. Its bars drawing in once is the app's one orchestrated motion
+  (skipped with reduced motion). It is hidden on small screens.
 - Content sits in `PageContainer` (max 72rem, left-aligned) inside each page,
   not the root layout, so a page can add full-width bands.
 - Mobile (375px): the header collapses to the mark and wordmark, a round red
