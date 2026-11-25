@@ -56,7 +56,7 @@ describe("requestCreateSchema", () => {
     expect(fieldErrors(result)).toEqual({
       title: ["Title is required"],
       description: ["Description is required"],
-      category: ["Choose a category"],
+      category: ["Choose a department"],
       priority: ["Choose a priority"],
     });
   });
@@ -64,7 +64,7 @@ describe("requestCreateSchema", () => {
   it("rejects values outside the enums", () => {
     const result = requestCreateSchema.safeParse({ ...validInput, category: "FINANCE", priority: "urgent" });
     expect(fieldErrors(result)).toMatchObject({
-      category: ["Choose a category"],
+      category: ["Choose a department"],
       priority: ["Choose a priority"],
     });
   });
@@ -126,11 +126,23 @@ describe("parseRequestQuery", () => {
   });
 });
 
-describe("requestEditSchema", () => {
-  it("requires every field, including status", async () => {
-    const { requestEditSchema } = await import("@/lib/validation");
-    const result = requestEditSchema.safeParse({ ...validInput });
-    expect(fieldErrors(result)).toEqual({ status: ["Choose a valid status"] });
-    expect(requestEditSchema.parse({ ...validInput, status: "COMPLETED" }).status).toBe("COMPLETED");
+describe("requestFormSchema", () => {
+  it("uses the create rules, with status optional (only shown when editing)", async () => {
+    const { requestFormSchema } = await import("@/lib/validation");
+    expect(requestFormSchema.parse(validInput)).not.toHaveProperty("status");
+    expect(requestFormSchema.parse({ ...validInput, status: "COMPLETED" }).status).toBe("COMPLETED");
+    expect(fieldErrors(requestFormSchema.safeParse({ ...validInput, status: "DONE" }))).toEqual({
+      status: ["Choose a valid status"],
+    });
+  });
+});
+
+describe("blank text fields", () => {
+  it("say 'required' once, not 'too short', for empty or whitespace-only input", () => {
+    const result = requestCreateSchema.safeParse({ ...validInput, title: "   ", description: "" });
+    expect(fieldErrors(result)).toMatchObject({
+      title: ["Title is required"],
+      description: ["Description is required"],
+    });
   });
 });
