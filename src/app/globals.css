@@ -33,11 +33,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
 
   /* Department routing colours: the one bold element in the UI. */
   --color-category-it: var(--category-it);
@@ -57,9 +52,15 @@
 
   --color-brand-red: var(--brand-red);
   --color-brand-red-strong: var(--brand-red-strong);
+  /* Red *text* (links): separate from red surfaces so it can lighten in dark mode. */
+  --color-accent-text: var(--accent-text);
   --color-brand-navy: var(--brand-navy);
   --color-brand-slate: var(--brand-slate);
   --color-on-navy-muted: var(--on-navy-muted);
+
+  /* "Selected" state (active chip, checked card): navy in light, near-white in dark. */
+  --color-selected: var(--selected);
+  --color-selected-foreground: var(--selected-foreground);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -103,7 +104,7 @@
   --input: #797f8f; /* --navy-60: 4:1 on white, so inputs read as inputs (WCAG 1.4.11) */
   --ring: #3e4c68;
 
-  /* Department routing tabs (and chart colours). */
+  /* Department routing tabs (also the dashboard department bars). */
   --category-it: #3e4c68; /* --lakeora-slate */
   --category-hr: #ed6e6b; /* --lakeora-coral */
   --category-administration: #fcbc2b; /* --color-warning (gold) */
@@ -132,12 +133,53 @@
   /* Secondary text on navy bands: 8:1 contrast. */
   --on-navy-muted: #bcc6d8; /* --slate-40 */
 
-  /* Charts use the department colours so a colour means one thing everywhere. */
-  --chart-1: var(--category-it);
-  --chart-2: var(--category-hr);
-  --chart-3: var(--category-administration);
-  --chart-4: var(--category-other);
-  --chart-5: var(--brand-navy);
+  --selected: #1f2a44;
+  --selected-foreground: #ffffff;
+
+  --accent-text: #c72c21; /* 5.5:1 on white */
+}
+
+/*
+ * Dark theme. Every text pairing was computed against its background before
+ * use (docs/testing.md); the brand navy header/hero bands stay as they are.
+ */
+.dark {
+  --brand-slate: #8894ab; /* --slate-60: bars and borders that must show on dark */
+
+  --background: #0d1322;
+  --foreground: #e7ebf3; /* 15.5:1 */
+  --card: #151d30;
+  --card-foreground: #e7ebf3; /* 14.1:1 */
+  --popover: #1a2338;
+  --popover-foreground: #e7ebf3;
+  --primary: #e7ebf3;
+  --primary-foreground: #0d1322;
+  --secondary: #222c44;
+  --secondary-foreground: #e7ebf3;
+  --muted: #1d263b;
+  --muted-foreground: #a3aec4; /* 7.5:1 on card */
+  --accent: #222c44;
+  --accent-foreground: #e7ebf3;
+  --destructive: #ff7a70; /* error text: 6.6:1 on card (delete buttons use brand red) */
+  --border: #2a3550;
+  --input: #6b7894; /* 3.8:1 on card */
+  --ring: #8fa6d6; /* 6.9:1 on card */
+
+  --category-it: #8894ab; /* slate lightened to stay visible on dark */
+
+  --status-new: #dce3f0;
+  --status-new-tint: #26314a;
+  --status-in-progress: #ffd27a;
+  --status-in-progress-tint: #3a2e10;
+  --status-completed: #7edca6;
+  --status-completed-tint: #12321f;
+
+  --priority-high: #ff7a70; /* 6.6:1 on card */
+
+  --selected: #e7ebf3;
+  --selected-foreground: #0d1322;
+
+  --accent-text: #ff7a70; /* 6.6:1 on card; #c72c21 would be 2.8:1 */
 }
 
 @layer base {
