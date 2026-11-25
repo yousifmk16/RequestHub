@@ -35,7 +35,10 @@ export function StatusChips({ value, counts, onChange }: StatusChipsProps) {
       role="group"
       aria-label="Filter by status"
       // Scrolls sideways on narrow phones rather than wrapping into two rows.
-      className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0"
+      // "relative" matters: the chips' sr-only text is position:absolute, and
+      // without a positioned scroll container it escapes the clipping and
+      // widens the whole page (found by the 320px reflow check).
+      className="relative -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0"
     >
       {chips.map(({ status, label, count, Icon }) => {
         const active = status === value;
@@ -44,8 +47,6 @@ export function StatusChips({ value, counts, onChange }: StatusChipsProps) {
             key={label}
             type="button"
             aria-pressed={active}
-            // Without this the name would read "In Progress7".
-            aria-label={`${label}, ${count} ${count === 1 ? "request" : "requests"}`}
             onClick={() => onChange(status)}
             className={cn(
               "inline-flex h-9 shrink-0 items-center gap-2 rounded-full border px-3.5 text-sm font-medium transition-colors",
@@ -56,7 +57,9 @@ export function StatusChips({ value, counts, onChange }: StatusChipsProps) {
             )}
           >
             <Icon aria-hidden="true" className="size-4" />
-            {label}
+            {/* The name is the visible text plus a hidden noun: "New 9 requests".
+                Visible text must lead the name (WCAG 2.5.3 Label in Name). */}
+            {label}{" "}
             <span
               className={cn(
                 "min-w-6 rounded-full px-1.5 text-center text-xs tabular-nums",
@@ -65,6 +68,7 @@ export function StatusChips({ value, counts, onChange }: StatusChipsProps) {
             >
               {count}
             </span>
+            <span className="sr-only"> {count === 1 ? "request" : "requests"}</span>
           </button>
         );
       })}

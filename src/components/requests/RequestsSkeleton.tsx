@@ -5,7 +5,7 @@ const CHIP_WIDTHS = ["w-20", "w-24", "w-32", "w-36"];
 /** Placeholder with the real layout's shape, so nothing jumps when data lands. */
 export function RequestsSkeleton() {
   return (
-    <div aria-busy="true" aria-label="Loading requests" className="flex flex-col gap-4">
+    <div role="status" aria-busy="true" aria-label="Loading requests" className="flex flex-col gap-4">
       <div className="flex gap-2">
         {CHIP_WIDTHS.map((width) => (
           <Skeleton key={width} className={`h-9 rounded-full ${width}`} />
