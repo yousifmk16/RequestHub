@@ -12,7 +12,7 @@ test("no page scrolls horizontally at 320px", async ({ page, request }, testInfo
     priority: "HIGH",
   });
 
-  for (const url of ["/", "/requests", "/requests?status=NEW&sort=priority", "/requests/new", `/requests/${id}/edit`]) {
+  for (const url of ["/", "/requests", "/requests?status=NEW&sort=priority", "/requests/new", `/requests/${id}`, `/requests/${id}/edit`]) {
     await page.goto(url);
     await page.getByRole("heading", { level: 1 }).first().waitFor();
     const { scrollWidth, clientWidth } = await page.evaluate(() => ({

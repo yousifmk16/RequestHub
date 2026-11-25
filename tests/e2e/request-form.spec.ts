@@ -27,7 +27,10 @@ test("creates a request, then edits it (R1, R3)", async ({ page }, testInfo) => 
   await expect(page.getByText("Request created")).toBeVisible();
   await expect(page.getByRole("link", { name: title, exact: true })).toBeVisible();
 
+  // The title opens the read-only detail page; Edit opens the form.
   await page.getByRole("link", { name: title, exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+  await page.getByRole("link", { name: "Edit", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Edit request" })).toBeVisible();
   await expect(page.getByLabel("Title", { exact: true })).toHaveValue(title);
   await page.getByRole("group", { name: "Priority" }).getByText("High").click();
