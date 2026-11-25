@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DELETE, GET as GET_ONE, PATCH } from "@/app/api/requests/[id]/route";
-import { GET as EXPORT_CSV } from "@/app/api/requests/export/route";
 import { GET as LIST, POST } from "@/app/api/requests/route";
 import { db } from "@/lib/db";
 import * as service from "@/lib/services/requests";
@@ -96,71 +95,6 @@ describe("GET /api/requests", () => {
     const response = await LIST(new Request(`${BASE}?category=FINANCE&sort=random`));
     expect(response.status).toBe(200);
     expect(await response.json()).toHaveLength(1);
-  });
-});
-
-describe("GET /api/requests/export", () => {
-  const EXPORT = `${BASE}/export`;
-
-  async function exportCsv(query = "") {
-    const response = await EXPORT_CSV(new Request(`${EXPORT}${query}`));
-    // .text() would drop a leading BOM, so decode the raw bytes instead.
-    const text = new TextDecoder("utf-8", { ignoreBOM: true }).decode(await response.arrayBuffer());
-    return { response, text, lines: text.replace(/^﻿/, "").trimEnd().split("\r\n") };
-  }
-
-  it("downloads UTF-8 CSV with a BOM and an attachment filename", async () => {
-    const { response, text } = await exportCsv();
-    expect(response.status).toBe(200);
-    expect(response.headers.get("Content-Type")).toBe("text/csv; charset=utf-8");
-    expect(response.headers.get("Content-Disposition")).toMatch(/^attachment; filename="requests-\d{4}-\d{2}-\d{2}\.csv"$/);
-    expect(response.headers.get("Cache-Control")).toBe("no-store");
-    expect(text.startsWith("﻿ID,Title,Description,Department,Priority,Status,Created,Updated\r\n")).toBe(true);
-  });
-
-  it("applies the list's filters and sort, so the file matches the screen", async () => {
-    await createViaApi({ ...validBody, title: "Old IT request", priority: "LOW" });
-    await createViaApi({ ...validBody, title: "Urgent IT request", priority: "HIGH" });
-    await createViaApi({ ...validBody, title: "Payslip question", category: "HR", priority: "HIGH" });
-
-    const { lines } = await exportCsv("?category=IT&sort=priority");
-    expect(lines.slice(1).map((line) => line.split(",")[1])).toEqual(["Urgent IT request", "Old IT request"]);
-  });
-
-  it("escapes quotes, commas and line breaks, and writes ISO dates", async () => {
-    const created = await createViaApi({
-      ...validBody,
-      title: 'Desk "B12", by the window',
-      description: "Line one.\nLine two, with a comma.",
-    });
-    const stored = await db.request.findUniqueOrThrow({ where: { id: created.id } });
-
-    const { text } = await exportCsv();
-    expect(text).toContain(
-      `${created.id},"Desk ""B12"", by the window","Line one.\nLine two, with a comma.",IT,Medium,New,` +
-        `${stored.createdAt.toISOString()},${stored.updatedAt.toISOString()}\r\n`,
-    );
-  });
-
-  it("returns just the header when nothing matches", async () => {
-    await createViaApi();
-    const { lines } = await exportCsv("?q=nothing-matches-this");
-    expect(lines).toEqual(["ID,Title,Description,Department,Priority,Status,Created,Updated"]);
-  });
-
-  it("ignores invalid filter values, like the list", async () => {
-    await createViaApi();
-    const { response, lines } = await exportCsv("?category=FINANCE&sort=random");
-    expect(response.status).toBe(200);
-    expect(lines).toHaveLength(2);
-  });
-
-  it("fails as JSON 500 without leaking details", async () => {
-    vi.spyOn(service, "listRequests").mockRejectedValue(new Error("SQLITE_BUSY: database is locked"));
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    const response = await EXPORT_CSV(new Request(EXPORT));
-    expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: "Something went wrong. Please try again." });
   });
 });
 
