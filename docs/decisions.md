@@ -310,6 +310,34 @@ Feeds the README section "Development approach".
     this way.
   - A missing id still returns HTTP 200 with the 404 screen (D11).
 
+### D17 — CSV export: a GET route that reuses the list query
+- **Context:** People want the current view in a spreadsheet (planned extra).
+- **Options:** A) build the CSV in the browser from data already on the page
+  · B) a CSV library (papaparse, csv-stringify) · C) a route,
+  `GET /api/requests/export?<list params>`, with a small hand-written
+  encoder.
+- **Choice:** C, no new dependency.
+- **Why:** The list page has no client copy of the data (it's server
+  rendered), so A would need a second fetch anyway. The route calls the same
+  `parseRequestQuery` and `listRequests` as the page, and the link is built
+  by the same URL helper as the filters, so the file always matches the
+  screen, including the in-memory priority sort (D2) and literal search (D3).
+  Writing CSV (not parsing it) is a dozen lines and fully unit-tested, so a
+  library would add weight without removing risk.
+- **Format:** RFC 4180 (quotes doubled, fields with `,` `"` or line breaks
+  quoted, CRLF rows), a UTF-8 BOM so Excel shows accents and Arabic
+  correctly, ISO 8601 UTC dates, and the UI's labels ("In Progress").
+- **CSV injection:** titles and descriptions come from anyone with the link.
+  A cell starting with `=`, `+`, `-`, `@`, tab or CR is run as a formula by
+  Excel, Sheets and LibreOffice, so those cells get a leading `'` (OWASP's
+  advice). **Trade-off:** a description that really starts with "-" (a bullet
+  list) shows the apostrophe in the file. Safety wins over that small change.
+- **Limits:** the whole result is built in memory, which is fine without
+  pagination at this size. With much more data it should stream rows.
+  Errors return the usual JSON 500, which a browser saves or shows as a
+  small file. The button is hidden when nothing matches, which makes that
+  rare.
+
 ## Template
 
 ### D1 — <decision title>
