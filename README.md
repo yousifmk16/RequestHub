@@ -200,7 +200,7 @@ chart library, and why a missing request's page returns HTTP 200.
 **Version control.** Each phase was built on its own branch and merged into
 `main` with `--no-ff`, so the history reads phase by phase. Commits are small
 Conventional Commits (`feat`, `fix`, `test`, `docs`, …), each with a message
-explaining *why*. 139 commits in total.
+explaining *why*. 141 commits in total.
 
 **Testing.** Unit tests for rules and helpers. Integration tests run the service
 and route handlers against a real SQLite file. End-to-end tests cover every
