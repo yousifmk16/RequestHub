@@ -169,3 +169,15 @@ describe("getRequestStats", () => {
     });
   });
 });
+
+describe("countByStatus", () => {
+  it("counts every status, including ones with no requests", async () => {
+    const { countByStatus } = await import("@/lib/services/requests");
+    expect(countByStatus([{ status: "NEW" }, { status: "NEW" }, { status: "COMPLETED" }])).toEqual({
+      NEW: 2,
+      IN_PROGRESS: 0,
+      COMPLETED: 1,
+    });
+    expect(countByStatus([])).toEqual({ NEW: 0, IN_PROGRESS: 0, COMPLETED: 0 });
+  });
+});

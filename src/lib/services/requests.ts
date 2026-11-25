@@ -58,6 +58,13 @@ function containsText(request: Request, lowerCaseTerm: string): boolean {
   );
 }
 
+/** How many of the given requests are in each status (every status present). */
+export function countByStatus(requests: Pick<Request, "status">[]): Record<Status, number> {
+  const counts = Object.fromEntries(STATUSES.map((status) => [status, 0])) as Record<Status, number>;
+  for (const request of requests) counts[request.status] += 1;
+  return counts;
+}
+
 export async function listRecentRequests(limit = 5): Promise<Request[]> {
   return db.request.findMany({ orderBy: { createdAt: "desc" }, take: limit });
 }
