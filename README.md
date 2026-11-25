@@ -45,7 +45,7 @@ Screenshots are taken from the live site by `node scripts/capture-screenshots.mj
 | **View** all requests | One responsive list, newest first: a coloured department tab, title and description preview, priority bars, status, and a relative time ("3 hours ago", exact date on hover). Each title opens a read-only detail page with the full description, both timestamps and the status control. |
 | **Edit and delete** | The same form, pre-filled, from the pencil icon or the detail page. Delete asks for confirmation and names the request. A missing request shows a not-found page. |
 | **Update status** | New / In Progress / Completed, changed straight from the list or the detail page. The change shows at once, rolls back with an explanation if saving fails, and persists after a reload. |
-| **Search and filter** | Search over title and description, status chips with live counts, department and priority filters, and sort (newest, oldest, highest priority). Everything combines and lives in the URL, so a view survives a refresh and can be shared. |
+| **Search and filter** | Search over title and description, status chips with live counts, department and priority filters, and sort (newest, oldest, highest priority). Everything combines and lives in the URL, so a view survives a refresh and can be shared. **Export CSV** downloads that same view. |
 | **Dashboard** | Totals per status, breakdowns by department and priority (each bar opens the filtered list), and the latest requests. Always current. |
 | **Persistence** | Data lives in a database: SQLite locally, Turso (hosted SQLite) in production. It survives refreshes, restarts and other devices. |
 
@@ -57,6 +57,10 @@ Screenshots are taken from the live site by `node scripts/capture-screenshots.mj
 - **Dark mode.** Follows the device by default, with a Light / Dark / Device
   menu. Every colour was re-checked, and the accessibility scan runs in both
   themes.
+- **CSV export.** "Export CSV" on the list downloads exactly the filtered,
+  sorted view. The file opens correctly in Excel (UTF-8 with BOM), and cells
+  that a spreadsheet would run as formulas are neutralised
+  ([D17](docs/decisions.md)).
 
 ---
 
@@ -79,8 +83,8 @@ No `.env` file is needed.
 |---|---|
 | `npm run dev` | Start the app (creates and seeds the local database if needed) |
 | `npm run dev:clean` | Clear `.next` and start. Use it after editing theme tokens or switching branches |
-| `npm test` | 116 unit and integration tests (Vitest, against a real SQLite test file) |
-| `npm run test:e2e` | 86 end-to-end runs (43 tests × desktop and 375px, both themes, on a production build) |
+| `npm test` | 135 unit and integration tests (Vitest, against a real SQLite test file) |
+| `npm run test:e2e` | 88 end-to-end runs (44 tests × desktop and 375px, both themes, on a production build) |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript strict |
 | `npm run db:seed` | Replace the local data with fresh demo data |
 | `npm run db:deploy` | Apply migrations to the production Turso database ([deployment guide](docs/deployment.md)) |
@@ -125,7 +129,7 @@ tests, and checked its own work in a real browser.
 
 **How AI output was checked, not trusted.** Every change ended with lint, types,
 tests and a look in the browser. Several times the obvious answer was wrong and
-the checks caught it. [docs/ai-log.md](docs/ai-log.md) records **36** of these
+the checks caught it. [docs/ai-log.md](docs/ai-log.md) records **37** of these
 moments: what the AI got wrong, how it was caught, and the fix. A few examples:
 
 - The npm `latest` tag for the Prisma CLI pointed at a **release candidate**,
@@ -162,15 +166,15 @@ UI ──► API route ──► Zod validation ──► service ──► Pris
 See [architecture.md](docs/architecture.md) for the full map, including where
 to change what.
 
-**Decisions are written down.** [decisions.md](docs/decisions.md) has 16
-entries (D1–D16), each with the options considered and the trade-off. Examples:
+**Decisions are written down.** [decisions.md](docs/decisions.md) has 17
+entries (D1–D17), each with the options considered and the trade-off. Examples:
 SQLite instead of Postgres for zero-setup cloning, HTML bars instead of a
 chart library, and why a missing request's page returns HTTP 200.
 
 **Version control.** Each phase was built on its own branch and merged into
 `main` with `--no-ff`, so the history reads phase by phase. Commits are small
 Conventional Commits (`feat`, `fix`, `test`, `docs`, …), each with a message
-explaining *why*. 94 commits in total.
+explaining *why*. 131 commits in total.
 
 **Testing.** Unit tests for rules and helpers. Integration tests run the service
 and route handlers against a real SQLite file. End-to-end tests cover every
@@ -221,9 +225,13 @@ WCAG scans, keyboard-only flows and 320px reflow. The R1–R8 coverage map is in
 2. Request history: comments, status timeline and an audit log.
 3. Pagination with SQL-side sorting and full-text search.
 4. Notifications when a request changes status.
-5. Planned extras: CSV export of the current view, and an Arabic interface
-   with right-to-left layout (the Almarai font already covers Arabic).
-6. Attachments (screenshots for IT requests).
+5. An Arabic interface with right-to-left layout, the remaining planned extra
+   (the Almarai font already covers Arabic; CSV export is done).
+6. Streamed CSV export for large result sets (today it is built in memory,
+   which suits the current size; [D17](docs/decisions.md)).
+7. Attachments (screenshots for IT requests).
+8. Return to the detail page after saving an edit opened from it (today the
+   form always returns to the list; [D16](docs/decisions.md)).
 
 ---
 
@@ -234,7 +242,7 @@ WCAG scans, keyboard-only flows and 320px reflow. The R1–R8 coverage map is in
 | [docs/requirements.md](docs/requirements.md) | Data model and R1–R8 with acceptance checks |
 | [docs/plan.md](docs/plan.md) | The phased build plan |
 | [docs/architecture.md](docs/architecture.md) | Data flow, folder map, where to change what |
-| [docs/decisions.md](docs/decisions.md) | D1–D16: technical decisions with options and trade-offs |
+| [docs/decisions.md](docs/decisions.md) | D1–D17: technical decisions with options and trade-offs |
 | [docs/design.md](docs/design.md) | Visual direction, palette and type, with sources |
 | [docs/testing.md](docs/testing.md) | Test coverage per requirement and the accessibility audit |
 | [docs/ai-log.md](docs/ai-log.md) | Where AI output was wrong, how it was caught, and the fix |
