@@ -47,7 +47,9 @@ function RequestRow({ request }: { request: Request }) {
   return (
     <li
       className={cn(
-        "relative grid gap-x-4 gap-y-3 py-5 ps-8 pe-4 transition-colors hover:bg-muted/40 md:items-center",
+        // Phones: title | actions on the first row, meta underneath (no empty
+        // actions line). From md up, COLUMNS takes over with one cell each.
+        "relative grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-3 py-5 ps-8 pe-4 transition-colors hover:bg-muted/40 md:items-center",
         COLUMNS,
       )}
     >
@@ -71,19 +73,21 @@ function RequestRow({ request }: { request: Request }) {
       </div>
 
       {/* Stacked meta on mobile; becomes grid cells from md up. */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 md:contents">
+      <div className="col-span-2 flex flex-wrap items-center gap-x-4 gap-y-2 md:contents">
         <CategoryLabel category={request.category} />
         <PriorityIndicator priority={request.priority} />
         <StatusSelect requestId={request.id} requestTitle={request.title} status={request.status} />
         <RelativeTime date={request.createdAt} className="text-sm text-muted-foreground tabular-nums" />
-        <div className="ms-auto flex items-center gap-0.5 md:justify-end">
-          <Button asChild variant="ghost" size="icon" className="text-muted-foreground">
-            <Link href={editHref} aria-label={`Edit ${request.title}`}>
-              <Pencil />
-            </Link>
-          </Button>
-          <DeleteRequestButton requestId={request.id} requestTitle={request.title} />
-        </div>
+      </div>
+
+      {/* Placed top-right beside the title on phones, last column from md up. */}
+      <div className="col-start-2 row-start-1 -me-2 -mt-1.5 flex items-start gap-0.5 md:col-auto md:row-auto md:me-0 md:mt-0 md:items-center md:justify-end">
+        <Button asChild variant="ghost" size="icon" className="text-muted-foreground">
+          <Link href={editHref} aria-label={`Edit ${request.title}`}>
+            <Pencil />
+          </Link>
+        </Button>
+        <DeleteRequestButton requestId={request.id} requestTitle={request.title} />
       </div>
     </li>
   );
