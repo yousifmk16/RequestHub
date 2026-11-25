@@ -60,7 +60,7 @@ describe("POST /api/requests", () => {
     expect(body.details.fieldErrors).toMatchObject({
       title: ["Title must be at least 3 characters"],
       description: ["Description is required"],
-      category: ["Choose a category"],
+      category: ["Choose a department"],
       priority: ["Choose a priority"],
     });
     expect(await db.request.count()).toBe(0);

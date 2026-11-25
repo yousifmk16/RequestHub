@@ -1,7 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-// The e2e database starts empty (scripts/prepare-test-db.mjs), so this is the
-// first-run experience: an invitation to create the first request.
+// Other specs create requests in the shared e2e database, so this one empties
+// it first (through the public API) instead of relying on file order.
+test.beforeEach(async ({ request }) => {
+  const existing: Array<{ id: string }> = await (await request.get("/api/requests")).json();
+  for (const { id } of existing) {
+    expect((await request.delete(`/api/requests/${id}`)).status()).toBe(204);
+  }
+});
+
+// The first-run experience: an invitation to create the first request.
 test("requests page invites the first request when there are none", async ({ page }) => {
   await page.goto("/requests");
 

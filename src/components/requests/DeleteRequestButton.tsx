@@ -21,10 +21,19 @@ import { apiRequest } from "@/lib/api-client";
 type DeleteRequestButtonProps = {
   requestId: string;
   requestTitle: string;
+  /** "icon" in list rows; "button" (with text) on the edit page. */
+  trigger?: "icon" | "button";
+  /** Where to go after deleting, e.g. back to the list from the edit page. */
+  redirectTo?: string;
 };
 
 /** Asks for confirmation, naming the request, before deleting it (R4). */
-export function DeleteRequestButton({ requestId, requestTitle }: DeleteRequestButtonProps) {
+export function DeleteRequestButton({
+  requestId,
+  requestTitle,
+  trigger = "icon",
+  redirectTo,
+}: DeleteRequestButtonProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -43,20 +52,27 @@ export function DeleteRequestButton({ requestId, requestTitle }: DeleteRequestBu
     setOpen(false);
     // A 404 means someone else already deleted it: the outcome the user wanted.
     toast.success("Request deleted", { description: requestTitle });
+    if (redirectTo) router.push(redirectTo);
     router.refresh();
   }
 
   return (
     <AlertDialog open={open} onOpenChange={(next) => !isDeleting && setOpen(next)}>
       <AlertDialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={`Delete ${requestTitle}`}
-          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2 />
-        </Button>
+        {trigger === "icon" ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={`Delete ${requestTitle}`}
+            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+          >
+            <Trash2 />
+          </Button>
+        ) : (
+          <Button variant="destructive" size="lg" className="h-10 px-4">
+            <Trash2 /> Delete request
+          </Button>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

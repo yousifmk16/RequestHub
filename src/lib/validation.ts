@@ -12,15 +12,18 @@ import {
  * (server) both validate with these schemas, so the rules can't drift apart.
  */
 
+// A blank field says "required" (and stops there) rather than "too short".
 const title = z
   .string({ error: "Title is required" })
   .trim()
+  .min(1, { error: "Title is required", abort: true })
   .min(TITLE_LENGTH.min, { error: `Title must be at least ${TITLE_LENGTH.min} characters` })
   .max(TITLE_LENGTH.max, { error: `Title must be at most ${TITLE_LENGTH.max} characters` });
 
 const description = z
   .string({ error: "Description is required" })
   .trim()
+  .min(1, { error: "Description is required", abort: true })
   .min(DESCRIPTION_LENGTH.min, {
     error: `Description must be at least ${DESCRIPTION_LENGTH.min} characters`,
   })
@@ -28,12 +31,17 @@ const description = z
     error: `Description must be at most ${DESCRIPTION_LENGTH.max} characters`,
   });
 
-const category = z.enum(Category, { error: "Choose a category" });
+// The UI calls a category a "department" everywhere, so the message does too.
+const category = z.enum(Category, { error: "Choose a department" });
 const priority = z.enum(Priority, { error: "Choose a priority" });
 const status = z.enum(Status, { error: "Choose a valid status" });
 
 // Status is not accepted on create: every new request starts as NEW.
 export const requestCreateSchema = z.object({ title, description, category, priority });
+
+// The create/edit form. Status only appears when editing (radios that start on
+// the current value, so it can't be left empty); create ignores it server-side.
+export const requestFormSchema = requestCreateSchema.extend({ status: status.optional() });
 
 // Every field optional so the list can PATCH just the status, but an empty
 // update is rejected rather than silently doing nothing.
@@ -64,6 +72,7 @@ export const requestQuerySchema = z.object({
 });
 
 export type RequestCreateInput = z.infer<typeof requestCreateSchema>;
+export type RequestFormValues = z.infer<typeof requestFormSchema>;
 export type RequestUpdateInput = z.infer<typeof requestUpdateSchema>;
 export type RequestQuery = z.infer<typeof requestQuerySchema>;
 
